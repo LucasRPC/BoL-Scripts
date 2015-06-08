@@ -1,6 +1,6 @@
 local scriptname = "Rengar The Mighty"
 local author = "Da Vinci"
-local version = "1.9"
+local version = "2.0"
 local champion = "Rengar"
 if myHero.charName:lower() ~= champion:lower() then return end
 local igniteslot = nil
@@ -53,7 +53,6 @@ function isUlting()
 end
 
 require("VPrediction")
-if VIP_USER then require("Prodiction") end
 
 function PrintMessage(script, message) 
     print("<font color=\"#6699ff\"><b>" .. script .. ":</b></font> <font color=\"#FFFFFF\">" .. message .. "</font>") 
@@ -117,8 +116,7 @@ function LoadMenu()
         Config.KillSteal:addParam("useIgnite", "Use Ignite", SCRIPT_PARAM_ONOFF, true)
 
     Config:addSubMenu(scriptname.." - Misc Settings", "Misc")
-        if VIP_USER then Config.Misc:addParam("predictionType",  "Type of prediction", SCRIPT_PARAM_LIST, 1, { "vPrediction", "Prodiction"})
-        else Config.Misc:addParam("predictionType",  "Type of prediction", SCRIPT_PARAM_LIST, 1, { "vPrediction"}) end
+        Config.Misc:addParam("predictionType",  "Type of prediction", SCRIPT_PARAM_LIST, 1, { "vPrediction"})
         Config.Misc:addParam("overkill","Overkill % for Dmg Predict..", SCRIPT_PARAM_SLICE, 20, 0, 100, 0)
 
     Config:addSubMenu(scriptname.." - Drawing Settings", "Draw")
@@ -167,12 +165,6 @@ function OnTick()
         
         if Config.Keys.Clear then Clear() end
 
-    for i = 1, myHero.buffCount do
-        local buff = myHero:getBuff(i)
-        if BuffIsValid(buff) then
-            --print(buff.name)
-        end
-    end
     --print(" ")
         Magnet()
 end
@@ -200,16 +192,20 @@ function Combo()
     if not Ferocity then
         if Config.Combo.useQ then CastQ(target) end
         if Config.Combo.useW and not Invisible then CastW(target) end
-        if Config.Combo.useE and not Invisible then CastE(target) end
+        if Config.Combo.useE and not Invisible and isJumping then 
+					myHero:Attack(target) 
+					CastE(target)
+				elseif Config.Combo.useE and not Invisible then
+					myHero:Attack(target) 
+					CastE(target)
+			  end
     end
     if Ferocity then
         if Config.Combo.R.useQ then CastQ(target) end
         if Config.Combo.R.useW then CastWR(target) end
-        if Config.Combo.R.useE and isJumping or isInBush then
-		CastE(target) 
-	elseif Config.Combo.R.useE and os.clock()-LastJump > 6 and isJumping or isInBush then 
-		CastE(target) 
-	end   
+        if Config.Combo.R.useE and isJumping then
+					CastE(target) 
+				end   
     end
 end
 
@@ -707,15 +703,7 @@ end
 function Prediction:getPrediction(unit, range, speed, delay, width, source, collision, skillshot)
     if Config.Misc.predictionType == 1 then
         return VP:GetBestCastPosition(unit, delay, width, range, speed, source, collision, skillshot)
-    else 
-        local pos, info = Prodiction.GetPrediction(unit, range, speed, delay, width, source)
-        if collision and skillshot == "line" then
-            if not info.mCollision() then 
-                return pos, info.hitchance, info.pos
-            else return pos, -1, info.pos end
-        else
-            return pos, info.hitchance, info.pos
-        end
+        
     end
 end
 
@@ -726,9 +714,6 @@ function Prediction:getTimeMinion(minion, mode)
     if mode == 1 then
         time = iOrb:WindUpTime() + GetDistance(myHero, minion) / self.ProjectileSpeed - self.delay
     --laneclear
-    elseif mode == 2 then
-        time = iOrb:AnimationTime() + GetDistance(myHero, minion) / self.ProjectileSpeed - self.delay
-        time = time * 2
     end
     return time
 end
@@ -743,10 +728,6 @@ function Prediction:getPredictedHealth(minion, mode)
         local predHealth, maxdamage, count = VP:GetPredictedHealth(minion, time, 0.07)
         output = predHealth
     --laneclear
-    elseif mode == 2 then
-        local time = self:getTimeMinion(minion, mode)
-        local predHealth, maxdamage, count = VP:GetPredictedHealth2(minion, time)
-        output = predHealth
     end
     return output
 end
