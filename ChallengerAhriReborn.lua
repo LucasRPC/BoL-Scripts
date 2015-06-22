@@ -2,7 +2,7 @@
 
 Challenger Ahri Reborn
 By LucasRP a.k.a DaVinci
-Version: 2.0
+Version: 2.00
 
 ]]
 
