@@ -64,13 +64,11 @@ function OnLoad()
         Menu.Harass:addParam("useQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
         Menu.Harass:addParam("useW", "Use W", SCRIPT_PARAM_ONOFF, true)
         Menu.Harass:addParam("useE", "Use E", SCRIPT_PARAM_ONOFF, true)
-        Menu.Harass:addParam("Mana", "Min. Mana Percent: ", SCRIPT_PARAM_SLICE, 30, 0, 100, 0)
 
     Menu:addSubMenu(myHero.charName.." - LaneClear Settings", "LaneClear")
         Menu.LaneClear:addParam("useQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
         Menu.LaneClear:addParam("useW", "Use W", SCRIPT_PARAM_ONOFF, true)
         Menu.LaneClear:addParam("useE", "Use E", SCRIPT_PARAM_ONOFF, true)
-        Menu.LaneClear:addParam("Mana", "Min. Mana Percent: ", SCRIPT_PARAM_SLICE, 50, 0, 100, 0)
 
     Menu:addSubMenu(myHero.charName.." - JungleClear Settings", "JungleClear")
         Menu.JungleClear:addParam("useQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
@@ -175,7 +173,7 @@ function Harass()
 end
 
 function Clear()
-    if myHero.mana / myHero.maxMana * 100 >= Menu.LaneClear.Mana then
+
         if Menu.LaneClear.useQ then
             Q:LaneClear()
         end
@@ -185,7 +183,6 @@ function Clear()
         if Menu.LaneClear.useE then
             E:LaneClear()
         end
-    end
 
     if Menu.JungleClear.useE then
         E:JungleClear()
