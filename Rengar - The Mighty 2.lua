@@ -1,6 +1,6 @@
 local ScriptName = "Rengar The Mighty"
 local Author = "Da Vinci"
-local version = 2.4
+local version = 2.5
 
 if myHero.charName ~= "Rengar" then return end
 
@@ -99,6 +99,7 @@ function OnTick()
         Harass()
     elseif OrbwalkManager:IsClear() then
         Clear()
+    end
     if Menu.Keys.HarassToggle then Harass() end
 end
 
