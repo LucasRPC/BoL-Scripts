@@ -99,9 +99,6 @@ function OnTick()
         Harass()
     elseif OrbwalkManager:IsClear() then
         Clear()
-    elseif OrbwalkManager:IsLastHit() then
-        LastHit()
-    end
     if Menu.Keys.HarassToggle then Harass() end
 end
 
@@ -127,6 +124,7 @@ function Combo()
         if not Ferocity then
         if Menu.Combo.useQ then
                     Q:Cast(target)
+                    myHero:Attack(target)
                 end
         if Menu.Combo.useW and not Invisible then W:Cast(target) end
         if Menu.Combo.useE and not Invisible and isJumping then 
@@ -149,11 +147,12 @@ function Combo()
         if isJumping then
 				if OrbwalkManager.GotReset then return end
             if myHero.mana >= 5 then
-                if Menu.Combo.R.useQ then Q:Cast(target) end
+                if Menu.Combo.R.useQ then Q:Cast(target)myHero:Attack(target) end
             end
             W:Cast(target)
             UseItems(target)
             Q:Cast(target)
+            myHero:Attack(target)
         end
     end
 end
