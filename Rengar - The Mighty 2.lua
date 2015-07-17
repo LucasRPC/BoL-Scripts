@@ -1,6 +1,6 @@
 local ScriptName = "Rengar The Mighty"
 local Author = "Da Vinci"
-local version = 2.2
+local version = 2.4
 
 if myHero.charName ~= "Rengar" then return end
 
