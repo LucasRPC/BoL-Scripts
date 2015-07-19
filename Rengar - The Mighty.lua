@@ -251,32 +251,6 @@ function TrueRange()
     return myHero.range + GetDistance(myHero, myHero.minBBox)
 end
 
-function Magnet()
-    if target ~= nil and (Combo or Harass) and ValidTarget(target, (TrueRange() + 50)) then
-        local dist = GetDistance(target)
-        if dist < (TrueRange() + 50) and dist > 50 then 
-            StayClose(target, true)
-        elseif dist <= 50 then
-            StayClose(target, false)
-        end
-    end
-end
-
-function StayClose(target, mode)
-    if mode then
-        local myVector = Vector(myHero.x, myHero.y, myHero.z)
-        local targetVector = Vector(unit.x, unit.y, unit.z)
-        local ClosePoint1 = targetVector + (myVector - targetVector):normalized()*100
-        local ClosePoint2 = targetVector - (myVector - targetVector):normalized()*100
-        if GetDistance(ClosePoint1) < GetDistance(ClosePoint2) then
-            SOWi:OrbWalk(target, ClosePoint1)
-        else
-            SOWi:OrbWalk(target, ClosePoint2)
-        end
-    else
-        SOWi:OrbWalk(target, myHero)
-    end
-end
 
 function Clear()
     EnemyMinions:update()
