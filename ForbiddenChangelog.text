@@ -25,4 +25,9 @@ Changelog will Start from Version 2.50
 - Fixed QE Movement
 - Added cooldown to wait spells for r
 - Added new target selector.
+2.61
+- Updated for 5.14
+- Syndra: Fixed QE Speed
+- Zed: Added restriction for W
+- Updated packet values for 5.14
 
