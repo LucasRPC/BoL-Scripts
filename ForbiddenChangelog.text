@@ -55,6 +55,8 @@ Changelog will Start from Version 2.50
 - TwistedFate: Added Toggle Start with Card
 2.71
 - TwistedFate: Fixed issue when selecting card
+2.72
+- Fixed Loop on Auth.
 
 
 
