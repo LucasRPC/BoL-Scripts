@@ -141,7 +141,7 @@ function Clear()
         end
                 
     if Menu.JungleClear.useQ then
-        CastWR()
+        Q:LaneClear()
     end
     if Menu.JungleClear.useW then
         W:JungleClear()
