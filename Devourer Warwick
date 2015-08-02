@@ -1,6 +1,6 @@
 local ScriptName = "Warwick :o"
 local Author = "Da Vinci"
-local version = 2
+local version = 1
 
 if myHero.charName ~= "Warwick" then return end
 
@@ -28,7 +28,7 @@ function OnLoad()
     if OrbwalkManager == nil then print("Check your SimpleLib file, isn't working... The script can't load without SimpleLib. Try to copy-paste the entire SimpleLib.lua on your common folder.") return end
     DelayAction(function() CheckUpdate() end, 5)
     DelayAction(function() _arrangePriorities() end, 10)
-    TS = TargetSelector(TARGET_LESS_CAST_PRIORITY, 850, DAMAGE_PHYSICAL)
+    TS = TargetSelector(TARGET_LESS_CAST_PRIORITY, 700, DAMAGE_PHYSICAL)
     Menu = scriptConfig(ScriptName.." by "..Author, ScriptName.."24052015")
 
     Q = _Spell({Slot = _Q, DamageName = "Q", Range = 400, Width = nil, Delay = 0.25, Speed = math.huge, Collision = false, Aoe = false, SPELL_TYPE.TARGETTED}):AddDraw()
