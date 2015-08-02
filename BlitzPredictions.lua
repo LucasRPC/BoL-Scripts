@@ -297,7 +297,7 @@ end
 function OnProcessSpell(unit, spell)
     if unit.isMe and spell.name:lower():find("attack") then
         SpellTarget = spell.target
-        DelayAction(function() ResetW(SpellTarget) end, spell.windUpTime - GetLatency() / 2000)
+        DelayAction(function() ResetE(SpellTarget) end, spell.windUpTime - GetLatency() / 2000)
     end
 end
 
