@@ -106,6 +106,7 @@ function Combo()
     local target = TS.target
     if OrbwalkManager.GotReset then return end
     if ValidTarget(target) then
+        UseItems(target)
         if Menu.Combo.useQ then
             Q:Cast(target)
         end
