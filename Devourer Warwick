@@ -106,9 +106,15 @@ function Combo()
     local target = TS.target
     if OrbwalkManager.GotReset then return end
     if ValidTarget(target) then
-        Q:Cast(target)
-        W:Cast(target)
-        R:Cast(target)
+        if Menu.Combo.useQ then
+            Q:Cast(target)
+        end
+        if Menu.Combo.useW then
+            W:Cast(target)
+        end
+        if Menu.Combo.useR and enemy.health/enemy.maxHealth <= 0.5 then
+            R:Cast(target)
+        end
     end
 end
 
