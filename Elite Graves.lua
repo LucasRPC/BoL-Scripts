@@ -290,40 +290,6 @@ function UseItems(unit)
     end
 end
 
-function OnCreateObj(object)
-    if object and GetDistanceSqr(myHero, object) < 1000 * 1000 and object.name:lower():find("rengar") then 
-        if object.name:lower():find("ring") then
-            isInBush = true
-        elseif object.name:lower():find("leap") then
-            isJumping = true
-                        LastJump = os.clock()
-        end
-    end
-        
-        
-  if object.name:find("Rengar_Base_P_Buf_Max.troy") then
-      Ferocity = true
-  end
-  if object.name:find("Rengar_Base_R_Cas.troy") then
-      Invisible = true
-  end
-end
-
-function OnDeleteObj(object)
-    if object and GetDistanceSqr(myHero, object) < 1000 * 100 and object.name:lower():find("rengar") then 
-        if object.name:lower():find("ring") then
-            isInBush = false
-        elseif object.name:lower():find("leap") then
-            isJumping = false
-        end
-    end
-  if object.name:find("Rengar_Base_P_Buf_Max.troy") then
-    Ferocity = false
-  end
-  if object.name:find("Rengar_Base_R_Buf.troy") then
-      Invisible = false
-  end
-end
 
 class "_Required"
 function _Required:__init()
