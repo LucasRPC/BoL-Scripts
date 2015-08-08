@@ -82,6 +82,8 @@ Changelog will Start from Version 2.50
 - Bundle: Fixed auth.
 2.84
 - Xerath: Fixed Q.
+2.85
+- Xerath: Fixed weird casts on Q.
 
 
 
