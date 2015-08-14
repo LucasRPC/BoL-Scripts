@@ -86,6 +86,11 @@ Changelog will Start from Version 2.50
 - Xerath: Fixed weird casts on Q.
 2.86
 - TF: Fixed some errors.
+2.87
+- TF: Fixed AA problems.
+- Azir: Fixed AA problems.
+- Xerath: Fixed some packet detection.
+- Viktor: Fixed some packet detection.
 
 
 
