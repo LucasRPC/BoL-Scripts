@@ -102,6 +102,8 @@ Changelog will Start from Version 2.50
 - Xerath: Added packets for CastSpell2
 - Viktor: Added packets for CastSpell3
 - Corki: Added packets for R.Stack
+2.93
+- Syndra: Fixed spam.
 2.95
 - Bundle: Fixed some auth problems.
 
