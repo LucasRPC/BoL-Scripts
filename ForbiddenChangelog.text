@@ -99,7 +99,10 @@ Changelog will Start from Version 2.50
 - Bundle: Fixed Lee Sin Bug
 2.90
 - Bundle: New Encryption !
-
+2.91
+- Xerath: Added packets for CastSpell2
+- Viktor: Added packets for CastSpell3
+- Corki: Added packets for R.Stack
 
 
 
