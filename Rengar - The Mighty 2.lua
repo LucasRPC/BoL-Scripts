@@ -1,6 +1,6 @@
 local ScriptName = "Rengar The Mighty"
 local Author = "Da Vinci"
-local version = 2.5
+local version = 2.6
 
 if myHero.charName ~= "Rengar" then return end
 
@@ -124,9 +124,9 @@ function Combo()
     if ValidTarget(target) then
         if not Ferocity then
         if Menu.Combo.useQ then
-                    Q:Cast(target)
-                    myHero:Attack(target)
-                end
+                Q:Cast(target)
+                myHero:Attack(target)
+        end
         if Menu.Combo.useW and not Invisible then W:Cast(target) end
         if Menu.Combo.useE and not Invisible and isJumping then 
                 E:Cast(target)
@@ -136,7 +136,10 @@ function Combo()
             end
         end
         if Ferocity then
-            if Menu.Combo.R.useQ then Q:Cast(target) end
+            if Menu.Combo.R.useQ then
+            	Q:Cast()
+            	myHero:Attack(target)
+            end
             if Menu.Combo.R.useW then CastWR(target) end
             if Menu.Combo.R.useE and isJumping and Invisible then
               E:Cast(target)
@@ -146,14 +149,15 @@ function Combo()
             end   
         end
         if isJumping then
-				if OrbwalkManager.GotReset then return end
-            if myHero.mana >= 5 then
-                if Menu.Combo.R.useQ then Q:Cast(target)myHero:Attack(target) end
-            end
-            W:Cast(target)
-            UseItems(target)
-            Q:Cast(target)
-            myHero:Attack(target)
+		if OrbwalkManager.GotReset then return end
+        	if myHero.mana >= 5 then
+                if Menu.Combo.R.useQ then Q:Cast()myHero:Attack(target) end
+            	end
+        	W:Cast(target)
+        	E:Cast(target)
+        	UseItems(target)
+        	Q:Cast(target)
+        	myHero:Attack(target)
         end
     end
 end
@@ -333,7 +337,7 @@ function OnCreateObj(object)
             isInBush = true
         elseif object.name:lower():find("leap") then
             isJumping = true
-                        LastJump = os.clock()
+            LastJump = os.clock()
         end
     end
         
