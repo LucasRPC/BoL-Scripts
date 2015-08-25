@@ -1,6 +1,6 @@
 local ScriptName = "DeadlySivir"
 local Author = "Da Vinci"
-local version = 1
+local version = 1.1
 
 if myHero.charName ~= "Sivir" then return end
 
@@ -294,25 +294,14 @@ end
 
 function ResetW(unit)
     if Menu.Combo.UseW then
-        if unit and W:IsReady() and ValidTarget(unit) and myHero.mana >= ManaCost(W) then
+        if unit and W:IsReady() and ValidTarget(unit) then
             if GetDistance(unit) <= myHero.range then
-                W:Cast(unit)
+                W:Cast()
             end
         end
     end
 end
 
-function ManaCost(spell)
-    if spell == Q then
-        return 60 + (10 * myHero:GetSpellData(_Q).level)
-    elseif spell == W then
-        return 60
-    elseif spell == E then
-        return 0
-    elseif spell == R then
-        return 100
-    end
-end
 
 class "_Required"
 function _Required:__init()
