@@ -31,7 +31,7 @@ function OnLoad()
     TS = TargetSelector(TARGET_LESS_CAST_PRIORITY, 850, DAMAGE_PHYSICAL)
     Menu = scriptConfig(ScriptName.." by "..Author, ScriptName.."24052015")
 
-    Q = _Spell({Slot = _Q, DamageName = "Q", Range = 920, Width = 75, Delay = 0.25, Speed = 1800, Collision = true, Aoe = false, Type = SPELL_TYPE.LINEAR}):AddDraw()
+    Q = _Spell({Slot = _Q, DamageName = "Q", Range = 910, Width = 73, Delay = 0.25, Speed = 1800, Collision = true, Aoe = false, Type = SPELL_TYPE.LINEAR}):AddDraw()
     W = _Spell({Slot = _W, DamageName = "W", Range = 125, Width = nil, Delay = 0.25, Speed = 1650, Aoe = false}):AddDraw()
     E = _Spell({Slot = _E, DamageName = "E", Range = 125, Width = nil, Delay = 0.5, Speed = math.huge, Aoe = false}):AddDraw()
     Ignite = _Spell({Slot = FindSummonerSlot("summonerdot"), DamageName = "IGNITE", Range = 600, Type = SPELL_TYPE.TARGETTED})
