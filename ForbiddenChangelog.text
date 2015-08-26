@@ -120,6 +120,9 @@ Changelog will Start from Version 2.50
 - Bundle: Fixed overwrite on other scripts.
 3.02
 - Zed: Fixed some shadow issues.
+3.03
+- TF: Fixed some AA issues.
+
 
 
 
