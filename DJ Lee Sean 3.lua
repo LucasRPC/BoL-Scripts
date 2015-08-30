@@ -2,7 +2,7 @@
 
 DJ Lee Sean 3.0
 By LucasRP a.k.a DaVinci
-Version: 1.11
+Version: 1.12
 
 ]]
 
