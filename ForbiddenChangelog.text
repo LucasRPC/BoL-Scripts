@@ -94,14 +94,14 @@ Changelog will Start from Version 2.50
 2.88
 - Bundle: New Encryption !
 2.89
-- Bundle: Fixed something on encryption
+- Bundle: Fixed something on encryption.
 2.90
 - Bundle: New Encryption !
 2.91
 - Bundle: Updated for 5.16.
-- Xerath: Added packets for CastSpell2
-- Viktor: Added packets for CastSpell3
-- Corki: Added packets for R.Stack
+- Xerath: Added packets for CastSpell2.
+- Viktor: Added packets for CastSpell3.
+- Corki: Added packets for R.Stack.
 2.93
 - Syndra: Fixed spam.
 2.95
@@ -137,5 +137,10 @@ Changelog will Start from Version 2.50
 - Ahri: Fixed spam.
 3.10
 - Xerath: Fixed Q.
-3.10
+3.12
 - Bundle: Added Kayle.
+3.13
+- Bundle: Updated for 5.17.
+- Xerath: Added packets for CastSpell2.
+- Viktor: Added packets for CastSpell3.
+- Corki: Added packets for R.Stack.
