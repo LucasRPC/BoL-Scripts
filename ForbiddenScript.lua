@@ -24,8 +24,8 @@ local Champions = {
     ["TwistedFate"]         = true,
     ["Viktor"]              = true,
     ["Xerath"]              = true,
-    ["Orianna"]              = true,
-    ["Kayle"]              = true,
+    ["Orianna"]             = true,
+    ["Kayle"]               = true,
 }
 if not Champions[myHero.charName] then return end
 
