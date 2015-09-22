@@ -184,4 +184,7 @@ Changelog will Start from Version 2.50
 - Bundle: Fixed some errors.
 5.18003
 - TF: Fixed some AA issues.
+5.18004
+- Xerath: Updated packets for HF.
+- Zed: Fixed some aa issues.
 
