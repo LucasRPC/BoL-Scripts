@@ -1,6 +1,6 @@
 local ScriptName = "DatGraves"
 local Author = "Da Vinci"
-local version = 1
+local version = 1.1
 
 if myHero.charName ~= "Graves" then return end
 
@@ -32,10 +32,10 @@ function OnLoad()
     Menu = scriptConfig(ScriptName.." by "..Author, ScriptName.."24052015")
 
     Q = _Spell({Slot = _Q, DamageName = "Q", Range = 950, Width = 25*math.pi, Delay = 0.25, Speed = 2000, Collision = false, Aoe = true, Type = SPELL_TYPE.CONE}):AddDraw()
-    W = _Spell({Slot = _W, DamageName = "W", Range = 950, Width = 250, Delay = 0.25, Speed = 1650, Aoe = true, Type = SPELL_TYPE.CIRCULAR}):AddDraw()
+    W = _Spell({Slot = _W, DamageName = "W", Range = 950, Width = 250, Delay = 0.5, Speed = 1650, Aoe = true, Type = SPELL_TYPE.CIRCULAR}):AddDraw()
     E = _Spell({Slot = _E, DamageName = "E", Range = 1500, Width = nil, Delay = 0.5, Speed = math.huge, Aoe = false}):AddDraw()
     Ignite = _Spell({Slot = FindSummonerSlot("summonerdot"), DamageName = "IGNITE", Range = 600, Type = SPELL_TYPE.TARGETTED})
-    R = _Spell({Slot = _R, DamageName = "R", Range = 1000, Width = 100, Delay = 0.25, Speed = 2100, Collision = false, Aoe = true, Type = SPELL_TYPE.TARGETTED}):AddDraw()
+    R = _Spell({Slot = _R, DamageName = "R", Range = 1000, Width = 100, Delay = 0.25, Speed = 2100, Collision = false, Aoe = true, Type = SPELL_TYPE.LINEAR}):AddDraw()
 
     Menu:addSubMenu(myHero.charName.." - Target Selector Settings", "TS")
         Menu.TS:addTS(TS)
@@ -126,6 +126,7 @@ function Combo()
     local target = TS.target
     if OrbwalkManager.GotReset then return end
     if ValidTarget(target) then
+		UseItems(target)
         if Menu.Combo.useQ then
             Q:Cast(target)
         end
