@@ -1,202 +1,202 @@
-Changelog will Start from Version 2.50
 
-2.50
-- Improved Auth and Azir.
-- Added Corki.
-2.51
-- Added Yasuo.
-2.52
-- Improved Azir's soldiers.
-2.53
-- Tweaks on Yasuo WindWall.
-2.54
-- Added Kassadin.
-- Option for Azir to force harass and not farm.
-2.55
-- Fixed Spam.
-2.56
-- Added Syndra.
-- Fixed E on Azir.
-2.57
-- Fixed Ahri Q.
-2.58
-- Added Syndra WE
-2.59
-- Fixed QE Movement
-- Added cooldown to wait spells for r
-- Added new target selector.
-2.61
-- Updated for 5.14
-- Syndra: Fixed QE Speed
-- Zed: Added restriction for W
-- Updated packet values for 5.14
-2.62
-- Syndra: Fixed QE Width
-2.63
-- Azir: Fixed Spam
-- Zed: Fixed Spam
-2.64
-- Fixed Spam
-2.65
-- Fixed Damage Spam
-2.66
-- Fixed QE On Syndra
-2.67
-- Diana: Added use r on enemies marked
-- Diana: Improved calculations
-- Ahri: Improved values to cast q and catch q.
-2.68
-- Added TF.
-2.69
-- TwistedFate: Added W-AA-Q logic.
-- TwistedFate: Fixed AA cancelation.
-- TwistedFate: Fixed red card on laneclear.
-2.70
-- TwistedFate: Added Toggle Start with Card
-2.71
-- TwistedFate: Fixed issue when selecting card
-2.72
-- Fixed Loop on Auth.
-2.73
-- Added Viktor.
-- TwistedFate: Fixed Q on laneclear.
-2.74
-- Viktor: Improved W.
-2.76
-- Viktor: Added harass togle.
-- Syndra: Improved QE/WE usage.
-2.77
-- Viktor: Improved Damage Calculations.
-2.78
-- Bundle: Updated for 5.15.
-2.79
-- Bundle: Added Xerath.
-- TF: Fixed gold card problem.
-2.80
-- Xerath: Improved values.
-2.81
-- Bundle: Fixed some auth problems.
-2.82
-- Bundle: Tried again to fix some auth problems...
-2.83
-- Bundle: Fixed auth.
-2.84
-- Xerath: Fixed Q.
-2.85
-- Xerath: Fixed weird casts on Q.
-2.86
-- TF: Fixed some errors.
-2.87
-- TF: Fixed AA problems.
-- Azir: Fixed AA problems.
-- Xerath: Fixed some packet detection.
-- Viktor: Fixed some packet detection.
-2.88
-- Bundle: New Encryption !
-2.89
-- Bundle: Fixed something on encryption.
-2.90
-- Bundle: New Encryption !
-2.91
-- Bundle: Updated for 5.16.
-- Xerath: Added packets for CastSpell2.
-- Viktor: Added packets for CastSpell3.
-- Corki: Added packets for R.Stack.
-2.93
-- Syndra: Fixed spam.
-2.95
-- Bundle: Fixed some auth problems.
-2.97
-- Ezreal: Fixed R KillSteal.
-- Viktor: Fixed R on Combo.
-2.98
-- Zed: Improved Shadow Manager.
-- Zed: Added time left for the shadows.
-- Syndra: Improved QE.
-3.00
-- Xerath: Fixed Q.
-3.01
-- Syndra: Fixed Spam.
-- Bundle: Fixed overwrite on other scripts.
-3.02
-- Zed: Fixed some shadow issues.
-3.03
+5.19001
+- TF: Fixed AA.
+5.19000
+- Xerath: Updated packets for 5.19.
+- Viktor: Updated packets for 5.19.
+5.18007
+- TF: Fixed AA.
+- Azir: Fixed AA.
+- Corki: Updated packets for 5.18.
+5.18006
+- Zed: Fixed Ignite on combo.
+- Cho'Gath: Fixed W
+5.18005
+- Zed: Improved the speed on AA.
+5.18004
+- Xerath: Updated packets for HF.
+- Zed: Fixed some aa issues.
+5.18003
 - TF: Fixed some AA issues.
-3.04
-- Syndra: Improved QE.
-3.05
-- Azir: Improved Q.
-3.06
-- Azir: Reverted Q.
-3.07
-- Syndra: Improved QE.
-- Zed: Added bug.
-3.08
-- TF: Fixed some card issues.
-3.09
-- Ahri: Fixed spam.
-3.10
+5.18002
+- Bundle: Fixed some errors.
+5.18001
+- Xerath: Updated packets for 5.18.
+- Viktor: Updated packets for 5.18.
+3.29
+- Corki: Improved Q.
+3.28
+- TF: Improved Q.
+3.27
+- Syndra: Improved R Killable.
+3.26
+- Bundle: Rito pls.
+3.25
+- Zed: Fixed W Harass.
+- Syndra: Fixed Spam + Fixed W + Improved QE.
+- Yasuo: Added all spells that can be blocked.
+3.24
+- Zed: Fixed R Targetting.
+3.23
 - Xerath: Fixed Q.
-3.12
-- Bundle: Added Kayle.
+3.22
+- Bundle: Husky pls.
+3.21
+- Zed: Fixed Shadows.
+3.20
+- Zed: Fixed bugsplats and bugs.
+- Azir: Fixed AA's.
+3.19
+- Xerath: Fixed bugsplats.
+3.18
+- Bundle: Fixed Kayle.
+3.17
+- Zed: Fixed 5.16 differences.
+3.16
+- Bundle: Fixed some rito changes.
+3.15
+- Viktor: Fixed E.
 3.13
 - Bundle: Updated for 5.17.
 - Xerath: Added packets for CastSpell2.
 - Viktor: Added packets for CastSpell3.
 - Corki: Added packets for R.Stack.
-3.15
-- Viktor: Fixed E.
-3.16
-- Bundle: Fixed some rito changes.
-3.17
-- Zed: Fixed 5.16 differences.
-3.18
-- Bundle: Fixed Kayle.
-3.19
-- Xerath: Fixed bugsplats.
-3.20
-- Zed: Fixed bugsplats and bugs.
-- Azir: Fixed AA's.
-3.21
-- Zed: Fixed Shadows.
-3.22
-- Bundle: Husky pls.
-3.23
+3.12
+- Bundle: Added Kayle.
+3.10
 - Xerath: Fixed Q.
-3.24
-- Zed: Fixed R Targetting.
-3.25
-- Zed: Fixed W Harass.
-- Syndra: Fixed Spam + Fixed W + Improved QE.
-- Yasuo: Added all spells that can be blocked.
-3.26
-- Bundle: Rito pls.
-3.27
-- Syndra: Improved R Killable.
-3.28
-- TF: Improved Q.
-3.29
-- Corki: Improved Q.
-5.18001
-- Xerath: Updated packets for 5.18.
-- Viktor: Updated packets for 5.18.
-5.18002
-- Bundle: Fixed some errors.
-5.18003
+3.09
+- Ahri: Fixed spam.
+3.08
+- TF: Fixed some card issues.
+3.07
+- Syndra: Improved QE.
+- Zed: Added bug.
+3.06
+- Azir: Reverted Q.
+3.05
+- Azir: Improved Q.
+3.04
+- Syndra: Improved QE.
+3.03
 - TF: Fixed some AA issues.
-5.18004
-- Xerath: Updated packets for HF.
-- Zed: Fixed some aa issues.
-5.18005
-- Zed: Improved the speed on AA.
-5.18006
-- Zed: Fixed Ignite on combo.
-- Cho'Gath: Fixed W
-5.18007
-- TF: Fixed AA.
-- Azir: Fixed AA.
-- Corki: Updated packets for 5.18.
-5.19000
-- Xerath: Updated packets for 5.19.
-- Viktor: Updated packets for 5.19.
-
+3.02
+- Zed: Fixed some shadow issues.
+3.01
+- Syndra: Fixed Spam.
+- Bundle: Fixed overwrite on other scripts.
+3.00
+- Xerath: Fixed Q.
+2.98
+- Zed: Improved Shadow Manager.
+- Zed: Added time left for the shadows.
+- Syndra: Improved QE.
+2.97
+- Ezreal: Fixed R KillSteal.
+- Viktor: Fixed R on Combo.
+2.95
+- Bundle: Fixed some auth problems.
+2.93
+- Syndra: Fixed spam.
+2.91
+- Bundle: Updated for 5.16.
+- Xerath: Added packets for CastSpell2.
+- Viktor: Added packets for CastSpell3.
+- Corki: Added packets for R.Stack.
+2.90
+- Bundle: New Encryption !
+2.89
+- Bundle: Fixed something on encryption.
+2.88
+- Bundle: New Encryption !
+2.87
+- TF: Fixed AA problems.
+- Azir: Fixed AA problems.
+- Xerath: Fixed some packet detection.
+- Viktor: Fixed some packet detection.
+2.86
+- TF: Fixed some errors.
+2.85
+- Xerath: Fixed weird casts on Q.
+2.84
+- Xerath: Fixed Q.
+2.83
+- Bundle: Fixed auth.
+2.82
+- Bundle: Tried again to fix some auth problems...
+2.81
+- Bundle: Fixed some auth problems.
+2.80
+- Xerath: Improved values.
+2.79
+- Bundle: Added Xerath.
+- TF: Fixed gold card problem.
+2.78
+- Bundle: Updated for 5.15.
+2.77
+- Viktor: Improved Damage Calculations.
+2.76
+- Viktor: Added harass togle.
+- Syndra: Improved QE/WE usage.
+2.74
+- Viktor: Improved W.
+2.73
+- Added Viktor.
+- TwistedFate: Fixed Q on laneclear.
+2.72
+- Fixed Loop on Auth.
+2.71
+- TwistedFate: Fixed issue when selecting card
+2.70
+- TwistedFate: Added Toggle Start with Card
+2.69
+- TwistedFate: Added W-AA-Q logic.
+- TwistedFate: Fixed AA cancelation.
+- TwistedFate: Fixed red card on laneclear.
+2.68
+- Added TF.
+2.67
+- Diana: Added use r on enemies marked
+- Diana: Improved calculations
+- Ahri: Improved values to cast q and catch q.
+2.66
+- Fixed QE On Syndra
+2.65
+- Fixed Damage Spam
+2.64
+- Fixed Spam
+2.63
+- Azir: Fixed Spam
+- Zed: Fixed Spam
+2.62
+- Syndra: Fixed QE Width
+2.61
+- Updated for 5.14
+- Syndra: Fixed QE Speed
+- Zed: Added restriction for W
+- Updated packet values for 5.14
+2.59
+- Fixed QE Movement
+- Added cooldown to wait spells for r
+- Added new target selector.
+2.58
+- Added Syndra WE
+2.57
+- Fixed Ahri Q.
+2.56
+- Added Syndra.
+- Fixed E on Azir.
+2.55
+- Fixed Spam.
+2.54
+- Added Kassadin.
+- Option for Azir to force harass and not farm.
+2.53
+- Tweaks on Yasuo WindWall.
+2.52
+- Improved Azir's soldiers.
+2.51
+- Added Yasuo.
+2.50
+- Improved Auth and Azir.
+- Added Corki.
