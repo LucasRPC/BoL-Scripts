@@ -1,5 +1,6 @@
 5.19001
 - TF: Fixed AA.
+- SimpleLib: Fixed MMA issue.
 
 5.19000
 - Xerath: Updated packets for 5.19.
