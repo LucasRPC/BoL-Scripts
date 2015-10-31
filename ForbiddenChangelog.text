@@ -1,6 +1,7 @@
 5.21000
 - Xerath: Updated packets for 5.21.
 - Viktor: Updated packets for 5.21.
+- SimpleLib: Enabled HPrediction and SPrediction.
 
 5.20002
 - Bundle: Second iteration because of bugsplats.
