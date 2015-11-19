@@ -1,3 +1,6 @@
+5.22002
+- TF: Fixed more weird card selections.
+
 5.22001
 - SimpleLib: Fixed some issues with SxOrbWalk.
 - SimpleLib: Disabled SxOrbWalk when loading SAC.
