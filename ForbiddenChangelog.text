@@ -1,7 +1,13 @@
+5.22001
+- SimpleLib: Fixed some issues with SxOrbWalk.
+- SimpleLib: Disabled SxOrbWalk when loading SAC.
+- TF: Fixed weird card selection.
+
 5.22000
 - Xerath: Updated packets for 5.22.
 - Viktor: Updated packets for 5.22.
 - Zed: Removed W Bug.
+
 
 5.21000
 - Xerath: Updated packets for 5.21.
