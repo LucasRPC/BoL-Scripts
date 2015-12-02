@@ -1,3 +1,9 @@
+5.23001
+- TF: Fixed spam errors.
+- Xerath: Updated packets for 5.23 HF
+- Viktor: Updated packets for 5.23 HF.
+- SimpleLib: Enabled DivinePred.
+
 5.23000
 - Zed: Updated W Range, W Speed and R Damage.
 - TF: Fixed gold card selection.
