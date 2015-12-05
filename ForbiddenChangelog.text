@@ -1,3 +1,6 @@
+5.23003
+- TF: Fixed "block" spam.
+
 5.23002
 - TF: Fixed "?:0: attempt to call field 'Packet' (a nil value)"
 
