@@ -1,3 +1,9 @@
+5.23005
+- Ahri: Removed some api that may crash.
+- Corki: Removed some api that may crash.
+- Diana: Removed some api that may crash.
+- Xerath: Removed some api that may crash.
+
 5.23004
 - TF: Improved performance (less fps drops).
 
