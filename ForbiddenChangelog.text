@@ -1,5 +1,5 @@
 5.23002
-- TF: Fixed "?:0: attempt to call field 'Packet' (a nil value)
+- TF: Fixed "?:0: attempt to call field 'Packet' (a nil value)"
 
 5.23001
 - TF: Fixed spam errors.
