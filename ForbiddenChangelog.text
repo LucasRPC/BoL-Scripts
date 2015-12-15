@@ -1,4 +1,9 @@
 5.24000
+- TF: Fixed some weird card selection in late game.
+- Zed: Added collision option in menu for harass (more damage).
+- Zed: Fixed weird target selector after using r.
+
+5.24000
 - Xerath: Updated packets for 5.24.
 - Viktor: Updated packets for 5.24.
 
