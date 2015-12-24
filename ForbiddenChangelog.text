@@ -1,5 +1,5 @@
 5.24003
-- Xerath: Added an option to use CastSpell2 instead of internal cast.
+- Xerath: Added an option to use CastSpell2 instead of the internal cast.
 
 5.24002
 - TF: Fixed selection of card.
