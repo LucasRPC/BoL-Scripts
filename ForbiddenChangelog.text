@@ -1,3 +1,6 @@
+5.24004
+- Bundle: Changed some code to improve stability.
+
 5.24003
 - Xerath: Added an option to use CastSpell2 instead of the internal cast.
 
