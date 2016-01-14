@@ -27,7 +27,6 @@ function OnLoad()
         Randuin     = _Spell({Range = 500, Type = SPELL_TYPE.SELF}):AddSlotFunction(function() return FindItemSlot("RanduinsOmen") end),
     }
 
-    DelayAction(function() CheckUpdate() end, 5)
     DelayAction(function() _arrangePriorities() end, 10)
     TS = TargetSelector(TARGET_LESS_CAST_PRIORITY, 850, DAMAGE_PHYSICAL)
     Menu = scriptConfig(ScriptName.." by "..Author, ScriptName.."24052015")
