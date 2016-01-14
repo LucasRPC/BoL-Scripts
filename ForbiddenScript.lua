@@ -2,7 +2,7 @@
 
 ForbiddenScript
 By LucasRP a.k.a DaVinci
-Version: 5.24005
+Version: 5.24006
 
 Don't forget to name the file ForbiddenScript.lua. Otherwise the updater won't work.
 
