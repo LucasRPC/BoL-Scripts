@@ -120,7 +120,6 @@ function Combo()
         if not Ferocity then
         if Menu.Combo.useQ then
                 Q:Cast(target)
-                myHero:Attack(target)
         end
         if Menu.Combo.useW and not Invisible then W:Cast(target) end
         if Menu.Combo.useE and not Invisible and isJumping then 
@@ -132,8 +131,7 @@ function Combo()
         end
         if Ferocity then
             if Menu.Combo.R.useQ then
-            	Q:Cast()
-            	myHero:Attack(target)
+							Q:Cast()
             end
             if Menu.Combo.R.useW then CastWR(target) end
             if Menu.Combo.R.useE and isJumping and Invisible then
