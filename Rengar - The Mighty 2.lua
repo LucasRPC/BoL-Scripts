@@ -1,6 +1,6 @@
 local ScriptName = "Rengar The Mighty"
 local Author = "Da Vinci"
-local version = 2.6
+local version = 2.7
 
 if myHero.charName ~= "Rengar" then return end
 
@@ -13,24 +13,20 @@ local Invisible = false
 local isInBush = false
 local isJumping = false
 local LastJump = 0
-local CastableItems = {
-    Tiamat      = { Range = 300 , Slot   = function() return FindItemSlot("TiamatCleave") end,  reqTarget = false,  IsReady                             = function() return (FindItemSlot("TiamatCleave") ~= nil and myHero:CanUseSpell(FindItemSlot("TiamatCleave")) == READY) end, Damage = function(target) return getDmg("TIAMAT", target, myHero) end},
-    Bork        = { Range = 450 , Slot   = function() return FindItemSlot("SwordOfFeastAndFamine") end,  reqTarget = true,  IsReady                     = function() return (FindItemSlot("SwordOfFeastAndFamine") ~= nil and myHero:CanUseSpell(FindItemSlot("SwordOfFeastAndFamine")) == READY) end, Damage = function(target) return getDmg("RUINEDKING", target, myHero) end},
-    Bwc         = { Range = 400 , Slot   = function() return FindItemSlot("BilgewaterCutlass") end,  reqTarget = true,  IsReady                         = function() return (FindItemSlot("BilgewaterCutlass") ~= nil and myHero:CanUseSpell(FindItemSlot("BilgewaterCutlass")) == READY) end, Damage = function(target) return getDmg("BWC", target, myHero) end},
-    Hextech     = { Range = 400 , Slot   = function() return FindItemSlot("HextechGunblade") end,  reqTarget = true,    IsReady                         = function() return (FindItemSlot("HextechGunblade") ~= nil and myHero:CanUseSpell(FindItemSlot("HextechGunblade")) == READY) end, Damage = function(target) return getDmg("HXG", target, myHero) end},
-    Blackfire   = { Range = 750 , Slot   = function() return FindItemSlot("BlackfireTorch") end,  reqTarget = true,   IsReady                           = function() return (FindItemSlot("BlackfireTorch") ~= nil and myHero:CanUseSpell(FindItemSlot("BlackfireTorch")) == READY) end, Damage = function(target) return getDmg("BLACKFIRE", target, myHero) end},
-    Youmuu      = { Range = myHero.range + myHero.boundingRadius + 350 , Slot   = function() return FindItemSlot("YoumusBlade") end,  reqTarget = false,  IsReady                              = function() return (FindItemSlot("YoumusBlade") ~= nil and myHero:CanUseSpell(FindItemSlot("YoumusBlade")) == READY) end, Damage = function(target) return 0 end},
-    Randuin     = { Range = 500 , Slot   = function() return FindItemSlot("RanduinsOmen") end,  reqTarget = false,  IsReady                             = function() return (FindItemSlot("RanduinsOmen") ~= nil and myHero:CanUseSpell(FindItemSlot("RanduinsOmen")) == READY) end, Damage = function(target) return 0 end},
-    TwinShadows = { Range = 1000, Slot   = function() return FindItemSlot("ItemWraithCollar") end,  reqTarget = false,  IsReady                         = function() return (FindItemSlot("ItemWraithCollar") ~= nil and myHero:CanUseSpell(FindItemSlot("ItemWraithCollar")) == READY) end, Damage = function(target) return 0 end},
-} 
+local OffensiveItems = nil
 
 function OnLoad()
-    local r = _Required()
-    r:Add({Name = "SimpleLib", Url = "raw.githubusercontent.com/jachicao/BoL/master/SimpleLib.lua"})
-    r:Check()
-        if OrbwalkManager.GotReset then return end
-    if r:IsDownloading() then return end
-    if OrbwalkManager == nil then print("Check your SimpleLib file, isn't working... The script can't load without SimpleLib. Try to copy-paste the entire SimpleLib.lua on your common folder.") return end
+    if not RequireSimpleLib() then return end
+
+    OffensiveItems = {
+        Tiamat      = _Spell({Range = 300, DamageName = "TIAMAT", Type = SPELL_TYPE.SELF}):AddSlotFunction(function() return FindItemSlot("Cleave") end),
+        Bork        = _Spell({Range = 450, DamageName = "RUINEDKING", Type = SPELL_TYPE.TARGETTED}):AddSlotFunction(function() return FindItemSlot("SwordOfFeastAndFamine") end),
+        Bwc         = _Spell({Range = 400, DamageName = "BWC", Type = SPELL_TYPE.TARGETTED}):AddSlotFunction(function() return FindItemSlot("BilgewaterCutlass") end),
+        Hextech     = _Spell({Range = 400, DamageName = "HXG", Type = SPELL_TYPE.TARGETTED}):AddSlotFunction(function() return FindItemSlot("HextechGunblade") end),
+        Youmuu      = _Spell({Range = myHero.range + myHero.boundingRadius + 250, Type = SPELL_TYPE.SELF}):AddSlotFunction(function() return FindItemSlot("YoumusBlade") end),
+        Randuin     = _Spell({Range = 500, Type = SPELL_TYPE.SELF}):AddSlotFunction(function() return FindItemSlot("RanduinsOmen") end),
+    }
+
     DelayAction(function() CheckUpdate() end, 5)
     DelayAction(function() _arrangePriorities() end, 10)
     TS = TargetSelector(TARGET_LESS_CAST_PRIORITY, 850, DAMAGE_PHYSICAL)
@@ -120,8 +116,8 @@ end
 
 function Combo()
     local target = TS.target
-    if OrbwalkManager.GotReset then return end
     if ValidTarget(target) then
+        if OrbwalkManager.GotReset and OrbwalkManager:InRange(target) then return end
         if not Ferocity then
         if Menu.Combo.useQ then
                 Q:Cast(target)
@@ -149,7 +145,7 @@ function Combo()
             end   
         end
         if isJumping then
-		if OrbwalkManager.GotReset then return end
+		      if OrbwalkManager.GotReset then return end
         	if myHero.mana >= 5 then
                 if Menu.Combo.R.useQ then Q:Cast()myHero:Attack(target) end
             	end
@@ -313,242 +309,163 @@ function GetComboDamage(target, q, w, e, r)
     return comboDamage, currentManaWasted
 end
 
-function Cast_Item(item, target)
-    if item.IsReady() and ValidTarget(target, item.Range) then
-        if item.reqTarget then
-            CastSpell(item.Slot(), target)
-        else
-            CastSpell(item.Slot())
-        end
-    end
-end
-
 function UseItems(unit)
-    if ValidTarget(unit) then
-        for _, item in pairs(CastableItems) do
-            Cast_Item(item, unit)
-        end
+    for _, item in pairs(OffensiveItems) do
+        item:Cast(unit)
     end
 end
 
 function OnCreateObj(object)
-    if object and GetDistanceSqr(myHero, object) < 1000 * 1000 and object.name:lower():find("rengar") then 
-        if object.name:lower():find("ring") then
-            isInBush = true
-        elseif object.name:lower():find("leap") then
-            isJumping = true
-            LastJump = os.clock()
+    if object and object.valid and object.name then
+        if object and GetDistanceSqr(myHero, object) < 1000 * 1000 and object.name:lower():find("rengar") then 
+              if object.name:lower():find("ring") then
+                  isInBush = true
+              elseif object.name:lower():find("leap") then
+                  isJumping = true
+                  LastJump = os.clock()
+              end
+          end
+              
+              
+        if object.name:find("Rengar_Base_P_Buf_Max.troy") then
+            Ferocity = true
+        end
+        if object.name:find("Rengar_Base_R_Cas.troy") then
+            Invisible = true
         end
     end
-        
-        
-  if object.name:find("Rengar_Base_P_Buf_Max.troy") then
-      Ferocity = true
-  end
-  if object.name:find("Rengar_Base_R_Cas.troy") then
-      Invisible = true
-  end
 end
 
 function OnDeleteObj(object)
-    if object and GetDistanceSqr(myHero, object) < 1000 * 100 and object.name:lower():find("rengar") then 
-        if object.name:lower():find("ring") then
-            isInBush = false
-        elseif object.name:lower():find("leap") then
-            isJumping = false
+    if object and object.valid and object.name then
+        if object and GetDistanceSqr(myHero, object) < 1000 * 100 and object.name:lower():find("rengar") then 
+              if object.name:lower():find("ring") then
+                  isInBush = false
+              elseif object.name:lower():find("leap") then
+                  isJumping = false
+              end
+          end
+        if object.name:find("Rengar_Base_P_Buf_Max.troy") then
+          Ferocity = false
+        end
+        if object.name:find("Rengar_Base_R_Buf.troy") then
+            Invisible = false
         end
     end
-  if object.name:find("Rengar_Base_P_Buf_Max.troy") then
-    Ferocity = false
-  end
-  if object.name:find("Rengar_Base_R_Buf.troy") then
-      Invisible = false
-  end
 end
 
-class "_Required"
-function _Required:__init()
-    self.requirements = {}
-    self.downloading = {}
-    return self
-end
-
-function _Required:Add(t)
-    assert(t and type(t) == "table", "_Required: table is invalid!")
-    local name = t.Name
-    assert(name and type(name) == "string", "_Required: name is invalid!")
-    local url = t.Url
-    assert(url and type(url) == "string", "_Required: url is invalid!")
-    local extension = t.Extension ~= nil and t.Extension or "lua"
-    local usehttps = t.UseHttps ~= nil and t.UseHttps or true
-    table.insert(self.requirements, {Name = name, Url = url, Extension = extension, UseHttps = usehttps})
-end
-
-function _Required:Check()
-    for i, tab in pairs(self.requirements) do
-        local name = tab.Name
-        local url = tab.Url
-        local extension = tab.Extension
-        local usehttps = tab.UseHttps
-        if not FileExist(LIB_PATH..name.."."..extension) then
-            print("Downloading a required library called "..name.. ". Please wait...")
-            local d = _Downloader(tab)
-            table.insert(self.downloading, d)
+function RequireSimpleLib()
+    if FileExist(LIB_PATH.."SimpleLib.lua") and not FileExist(SCRIPT_PATH.."SimpleLib.lua") then
+        require "SimpleLib"
+        if _G.SimpleLibVersion == nil then 
+            print("Your SimpleLib file is wrong.")
+            return false
         end
-    end
-    
-    if #self.downloading > 0 then
-        for i = 1, #self.downloading, 1 do 
-            local d = self.downloading[i]
-            AddTickCallback(function() d:Download() end)
+        if _G.SimpleLibVersion < 1.41 then
+            print("You need the lastest version of SimpleLib. The library should autoupdate.")
+            return false
         end
-        self:CheckDownloads()
+        return true
+    elseif FileExist(LIB_PATH.."SimpleLib.lua") and FileExist(SCRIPT_PATH.."SimpleLib.lua") then
+        print("SimpleLib.lua should not be in Custom Script (Only on Common folder), delete it from there...")
+        return false
     else
-        for i, tab in pairs(self.requirements) do
-            local name = tab.Name
-            local url = tab.Url
-            local extension = tab.Extension
-            local usehttps = tab.UseHttps
-            if FileExist(LIB_PATH..name.."."..extension) and extension == "lua" then
-                require(name)
-            end
+        local function Base64Encode2(data)
+            local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+            return ((data:gsub('.', function(x)
+                local r,b='',x:byte()
+                for i=8,1,-1 do r=r..(b%2^i-b%2^(i-1)>0 and '1' or '0') end
+                return r;
+            end)..'0000'):gsub('%d%d%d?%d?%d?%d?', function(x)
+                if (#x < 6) then return '' end
+                local c=0
+                for i=1,6 do c=c+(x:sub(i,i)=='1' and 2^(6-i) or 0) end
+                return b:sub(c+1,c+1)
+            end)..({ '', '==', '=' })[#data%3+1])
         end
-    end
-end
-
-function _Required:CheckDownloads()
-    if #self.downloading == 0 then 
-        print("Required libraries downloaded. Please reload with 2x F9.")
-    else
-        for i = 1, #self.downloading, 1 do
-            local d = self.downloading[i]
-            if d.GotScript then
-                table.remove(self.downloading, i)
-                break
-            end
-        end
-        DelayAction(function() self:CheckDownloads() end, 2) 
-    end 
-end
-
-function _Required:IsDownloading()
-    return self.downloading ~= nil and #self.downloading > 0 or false
-end
-
-class "_Downloader"
-function _Downloader:__init(t)
-    local name = t.Name
-    local url = t.Url
-    local extension = t.Extension ~= nil and t.Extension or "lua"
-    local usehttps = t.UseHttps ~= nil and t.UseHttps or true
-    self.SavePath = LIB_PATH..name.."."..extension
-    self.ScriptPath = '/BoL/TCPUpdater/GetScript'..(usehttps and '5' or '6')..'.php?script='..self:Base64Encode(url)..'&rand='..math.random(99999999)
-    self:CreateSocket(self.ScriptPath)
-    self.DownloadStatus = 'Connect to Server'
-    self.GotScript = false
-end
-
-function _Downloader:CreateSocket(url)
-    if not self.LuaSocket then
-        self.LuaSocket = require("socket")
-    else
-        self.Socket:close()
-        self.Socket = nil
-        self.Size = nil
-        self.RecvStarted = false
-    end
-    self.Socket = self.LuaSocket.tcp()
-    if not self.Socket then
-        print('Socket Error')
-    else
-        self.Socket:settimeout(0, 'b')
-        self.Socket:settimeout(99999999, 't')
-        self.Socket:connect('sx-bol.eu', 80)
-        self.Url = url
-        self.Started = false
-        self.LastPrint = ""
-        self.File = ""
-    end
-end
-
-function _Downloader:Download()
-    if self.GotScript then return end
-    self.Receive, self.Status, self.Snipped = self.Socket:receive(1024)
-    if self.Status == 'timeout' and not self.Started then
-        self.Started = true
-        self.Socket:send("GET "..self.Url.." HTTP/1.1\r\nHost: sx-bol.eu\r\n\r\n")
-    end
-    if (self.Receive or (#self.Snipped > 0)) and not self.RecvStarted then
-        self.RecvStarted = true
-        self.DownloadStatus = 'Downloading Script (0%)'
-    end
-
-    self.File = self.File .. (self.Receive or self.Snipped)
-    if self.File:find('</si'..'ze>') then
-        if not self.Size then
-            self.Size = tonumber(self.File:sub(self.File:find('<si'..'ze>')+6,self.File:find('</si'..'ze>')-1))
-        end
-        if self.File:find('<scr'..'ipt>') then
-            local _,ScriptFind = self.File:find('<scr'..'ipt>')
-            local ScriptEnd = self.File:find('</scr'..'ipt>')
-            if ScriptEnd then ScriptEnd = ScriptEnd - 1 end
-            local DownloadedSize = self.File:sub(ScriptFind+1,ScriptEnd or -1):len()
-            self.DownloadStatus = 'Downloading Script ('..math.round(100/self.Size*DownloadedSize,2)..'%)'
-        end
-    end
-    if self.File:find('</scr'..'ipt>') then
-        self.DownloadStatus = 'Downloading Script (100%)'
-        local a,b = self.File:find('\r\n\r\n')
-        self.File = self.File:sub(a,-1)
-        self.NewFile = ''
-        for line,content in ipairs(self.File:split('\n')) do
-            if content:len() > 5 then
-                self.NewFile = self.NewFile .. content
-            end
-        end
-        local HeaderEnd, ContentStart = self.NewFile:find('<sc'..'ript>')
-        local ContentEnd, _ = self.NewFile:find('</scr'..'ipt>')
-        if not ContentStart or not ContentEnd then
-            if self.CallbackError and type(self.CallbackError) == 'function' then
-                self.CallbackError()
-            end
+        local SavePath = LIB_PATH.."SimpleLib.lua"
+        local ScriptPath = '/BoL/TCPUpdater/GetScript5.php?script='..Base64Encode2("raw.githubusercontent.com/jachicao/BoL/master/SimpleLib.lua")..'&rand='..math.random(99999999)
+        local GotScript = false
+        local LuaSocket = nil
+        local Socket = nil
+        local Size = nil
+        local RecvStarted = false
+        local Receive, Status, Snipped = nil, nil, nil
+        local Started = false
+        local File = ""
+        local NewFile = ""
+        if not LuaSocket then
+            LuaSocket = require("socket")
         else
-            local newf = self.NewFile:sub(ContentStart+1,ContentEnd-1)
-            local newf = newf:gsub('\r','')
-            if newf:len() ~= self.Size then
-                if self.CallbackError and type(self.CallbackError) == 'function' then
-                    self.CallbackError()
-                end
-                return
-            end
-            local newf = Base64Decode(newf)
-            if type(load(newf)) ~= 'function' then
-                if self.CallbackError and type(self.CallbackError) == 'function' then
-                    self.CallbackError()
-                end
-            else
-                local f = io.open(self.SavePath,"w+b")
-                f:write(newf)
-                f:close()
-                if self.CallbackUpdate and type(self.CallbackUpdate) == 'function' then
-                    self.CallbackUpdate(self.OnlineVersion,self.LocalVersion)
-                end
-            end
+            Socket:close()
+            Socket = nil
+            Size = nil
+            RecvStarted = false
         end
-        self.GotScript = true
-    end
-end
+        Socket = LuaSocket.tcp()
+        if not Socket then
+            print('Socket Error')
+        else
+            Socket:settimeout(0, 'b')
+            Socket:settimeout(99999999, 't')
+            Socket:connect('sx-bol.eu', 80)
+            Started = false
+            File = ""
+        end
+        AddTickCallback(function()
+            if GotScript then return end
+            Receive, Status, Snipped = Socket:receive(1024)
+            if Status == 'timeout' and not Started then
+                Started = true
+                print("Downloading a library called SimpleLib. Please wait...")
+                Socket:send("GET "..ScriptPath.." HTTP/1.1\r\nHost: sx-bol.eu\r\n\r\n")
+            end
+            if (Receive or (#Snipped > 0)) and not RecvStarted then
+                RecvStarted = true
+            end
 
-function _Downloader:Base64Encode(data)
-    local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-    return ((data:gsub('.', function(x)
-        local r,b='',x:byte()
-        for i=8,1,-1 do r=r..(b%2^i-b%2^(i-1)>0 and '1' or '0') end
-        return r;
-    end)..'0000'):gsub('%d%d%d?%d?%d?%d?', function(x)
-        if (#x < 6) then return '' end
-        local c=0
-        for i=1,6 do c=c+(x:sub(i,i)=='1' and 2^(6-i) or 0) end
-        return b:sub(c+1,c+1)
-    end)..({ '', '==', '=' })[#data%3+1])
+            File = File .. (Receive or Snipped)
+            if File:find('</si'..'ze>') then
+                if not Size then
+                    Size = tonumber(File:sub(File:find('<si'..'ze>') + 6, File:find('</si'..'ze>') - 1))
+                end
+                if File:find('<scr'..'ipt>') then
+                    local _, ScriptFind = File:find('<scr'..'ipt>')
+                    local ScriptEnd = File:find('</scr'..'ipt>')
+                    if ScriptEnd then ScriptEnd = ScriptEnd - 1 end
+                    local DownloadedSize = File:sub(ScriptFind + 1,ScriptEnd or -1):len()
+                end
+            end
+            if File:find('</scr'..'ipt>') then
+                local a,b = File:find('\r\n\r\n')
+                File = File:sub(a,-1)
+                NewFile = ''
+                for line,content in ipairs(File:split('\n')) do
+                    if content:len() > 5 then
+                        NewFile = NewFile .. content
+                    end
+                end
+                local HeaderEnd, ContentStart = NewFile:find('<sc'..'ript>')
+                local ContentEnd, _ = NewFile:find('</scr'..'ipt>')
+                if not ContentStart or not ContentEnd then
+                else
+                    local newf = NewFile:sub(ContentStart + 1,ContentEnd - 1)
+                    local newf = newf:gsub('\r','')
+                    if newf:len() ~= Size then
+                        return
+                    end
+                    local newf = Base64Decode(newf)
+                    if type(load(newf)) ~= 'function' then
+                    else
+                        local f = io.open(SavePath, "w+b")
+                        f:write(newf)
+                        f:close()
+                        print("Required library downloaded. Please reload with 2x F9.")
+                    end
+                end
+                GotScript = true
+            end
+        end)
+        return false
+    end
 end
