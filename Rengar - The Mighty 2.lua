@@ -143,17 +143,6 @@ function Combo()
                 E:Cast(target)
             end   
         end
-        if isJumping then
-		      if OrbwalkManager.GotReset then return end
-        	if myHero.mana >= 5 then
-                if Menu.Combo.R.useQ then Q:Cast()myHero:Attack(target) end
-            	end
-        	W:Cast(target)
-        	E:Cast(target)
-        	UseItems(target)
-        	Q:Cast(target)
-        	myHero:Attack(target)
-        end
     end
 end
 
