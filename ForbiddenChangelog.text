@@ -1,3 +1,8 @@
+6.30000
+- Xerath: Updated packets for 6.3.
+- TwistedFate: Fixed selecting card after dead.
+- Zed: Added percent health checks to evade.
+
 6.20003
 - Xerath: Updated packets for 6.2 HF.
 
