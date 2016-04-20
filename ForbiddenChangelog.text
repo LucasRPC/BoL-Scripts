@@ -1,3 +1,8 @@
+6.80000
+- TwistedFate: Now the script will wait until you select the card to attack.
+- Zed: Fixed Cast W1 when spells are on cooldown.
+- Xerath: Updated packets for 6.8.
+
 6.70000
 - Xerath: Updated packets for 6.7.
 
