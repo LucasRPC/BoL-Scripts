@@ -1,6 +1,7 @@
 local ScriptName = "BioLogic Lux"
+local AUTOUPDATES = true
 local Author = "Da Vinci"
-local version = 1.1
+local version = 1.2
 
 if myHero.charName ~= "Lux" then return end
 
@@ -12,6 +13,21 @@ local DefensiveItems = nil
 local DefensiveItems = {
     Zhonyas      = { Range = 1000 , Slot   = function() return FindItemSlot("ZhonyasHourglass") end,  reqTarget = false,  IsReady = function() return (FindItemSlot("ZhonyasHourglass") ~= nil and myHero:CanUseSpell(FindItemSlot("ZhonyasHourglass")) == READY) end,},
 }
+
+function CheckUpdate()
+    if AUTOUPDATES then
+        local ToUpdate = {}
+        ToUpdate.LocalVersion = version
+        ToUpdate.VersionPath = "raw.githubusercontent.com/LucasRPC/BoL-Scripts/master/version/Lux.version"
+        ToUpdate.ScriptPath = "raw.githubusercontent.com/LucasRPC/BoL-Scripts/master/BioLogicLux.lua"
+        ToUpdate.SavePath = SCRIPT_PATH.._ENV.FILE_NAME
+        ToUpdate.CallbackUpdate = function(NewVersion,OldVersion) PrintMessage(ScriptName, "Updated to "..NewVersion..". Please reload with 2x F9.") end
+        ToUpdate.CallbackNoUpdate = function(OldVersion) PrintMessage(ScriptName, "No Updates Found.") end
+        ToUpdate.CallbackNewVersion = function(NewVersion) PrintMessage(ScriptName, "New Version found ("..NewVersion.."). Please wait...") end
+        ToUpdate.CallbackError = function(NewVersion) PrintMessage(ScriptName, "Error while downloading.") end
+        _ScriptUpdate(ToUpdate)
+    end
+end
 
 function OnLoad()
 
@@ -92,11 +108,14 @@ function OnLoad()
     Menu:addSubMenu(myHero.charName.." - Keys Settings", "Keys")
         OrbwalkManager:LoadCommonKeys(Menu.Keys)
         Menu.Keys:addParam("HarassToggle", "Harass (Toggle)", SCRIPT_PARAM_ONKEYTOGGLE, false, string.byte("K"))
-                Menu.Keys:addParam("ManualR", "Manual R (T)", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("T"))
+        Menu.Keys:addParam("ManualR", "Manual R (T)", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("T"))
+        Menu.Keys:addParam("Flee", "Flee Like a Girl", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("S"))
         Menu.Keys:permaShow("HarassToggle")
-                Menu.Keys:permaShow("ManualR")
+        Menu.Keys:permaShow("Flee")
+        Menu.Keys:permaShow("ManualR")
         Menu.Keys.HarassToggle = false
-                Menu.Keys.ManualR = false
+        Menu.Keys.ManualR = false
+        Menu.Keys.Flee = false
 end
 
 function OnTick()
@@ -113,6 +132,7 @@ function OnTick()
     end
     if Menu.Keys.HarassToggle then Harass() end
     if Menu.Keys.ManualR then Ult() end
+    if Menu.Keys.Flee then TryToRun() end
 end
 
 function Collides(vec)
@@ -169,8 +189,18 @@ end
 function Ult()
     local target = TS.target
     if ValidTarget(target) then
-            R:Cast(target)
-        end
+        R:Cast(target)
+    end
+end
+
+function TryToRun()
+    local target = TS.target
+    if Menu.Keys.Flee then
+        myHero:MoveTo(mousePos.x, mousePos.z)
+    end
+    if ValidTarget(target) and Q:IsReady() then
+        Q:Cast(target)
+    end
 end
 
 function Harass()
