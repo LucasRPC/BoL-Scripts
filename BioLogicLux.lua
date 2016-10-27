@@ -1,6 +1,6 @@
 local ScriptName = "BioLogic Lux"
 local Author = "Da Vinci"
-local version = 1
+local version = 1.1
 
 if myHero.charName ~= "Lux" then return end
 
@@ -8,8 +8,9 @@ local Q, W, E, R, Ignite = nil, nil, nil, nil, nil
 local TS, Menu = nil, nil
 local PredictedDamage = {}
 local RefreshTime = 0.4
+local DefensiveItems = nil
 local DefensiveItems = {
-    Zhonyas     = _Spell({Range = 1000, Type = SPELL_TYPE.SELF}):AddSlotFunction(function() return FindItemSlot("ZhonyasHourglass") end),
+    Zhonyas      = { Range = 1000 , Slot   = function() return FindItemSlot("ZhonyasHourglass") end,  reqTarget = false,  IsReady = function() return (FindItemSlot("ZhonyasHourglass") ~= nil and myHero:CanUseSpell(FindItemSlot("ZhonyasHourglass")) == READY) end,},
 }
 
 function OnLoad()
@@ -30,6 +31,7 @@ function OnLoad()
     E = _Spell({Slot = _E, DamageName = "E", Range = 1100, Width = 330, Delay = 0.25, Speed = 1300, Aoe = false, Collision = false, Type = SPELL_TYPE.CIRCULAR}):AddDraw()
     Ignite = _Spell({Slot = FindSummonerSlot("summonerdot"), DamageName = "IGNITE", Range = 600, Type = SPELL_TYPE.TARGETTED})
     R = _Spell({Slot = _R, DamageName = "R", Range = 3300, Width = 140, Delay = 1, Speed = math.huge, Collision = false, Aoe = true, Type = SPELL_TYPE.LINEAR}):AddDraw()
+    Zhonyas = _Spell({Range = 1000, Type = SPELL_TYPE.SELF}):AddSlotFunction(function() return FindItemSlot("ZhonyasHourglass") end),
 
     Menu:addSubMenu(myHero.charName.." - Target Selector Settings", "TS")
         Menu.TS:addTS(TS)
@@ -62,7 +64,7 @@ function OnLoad()
     Menu:addSubMenu(myHero.charName.." - KillSteal Settings", "KillSteal")
         Menu.KillSteal:addParam("useQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
         Menu.KillSteal:addParam("useE", "Use E", SCRIPT_PARAM_ONOFF, true)
-		Menu.KillSteal:addParam("useR", "Use R (Not Recomended)", SCRIPT_PARAM_ONOFF, true)
+        Menu.KillSteal:addParam("useR", "Use R (Not Recomended)", SCRIPT_PARAM_ONOFF, true)
         Menu.KillSteal:addParam("useIgnite", "Use Ignite", SCRIPT_PARAM_ONOFF, true)
 
         Menu:addSubMenu(myHero.charName.." - Auto Settings", "Auto")
@@ -77,7 +79,7 @@ function OnLoad()
                 end
             )
         Menu.Auto:addSubMenu("Use E To Shield", "UseE")
-            _Evader(champion.Menu.Auto.UseE):CheckCC():AddCallback(
+            _Evader(Menu.Auto.UseE):CheckCC():AddCallback(
                 function(target)
                     if E:IsReady() and IsValidTarget(target) then
                         E:Cast()
@@ -110,7 +112,7 @@ function OnTick()
         Clear()
     end
     if Menu.Keys.HarassToggle then Harass() end
-    if Menu.Keys.ManualR then R:Cast(target) end
+    if Menu.Keys.ManualR then Ult() end
 end
 
 function Collides(vec)
@@ -137,8 +139,9 @@ function Combo()
     local target = TS.target
     local q, w, e, r, dmg = GetBestCombo(target)
     if ValidTarget(target) then
-        if Menu.Combo.Zhonyas > 0 and PercentageHealth() <= Menu.Combo.Zhonyas and DefensiveItems.Zhonyas:IsReady() then
+        if Menu.Combo.Zhonyas > 0 and PercentageHealth() <= Menu.Combo.Zhonyas and DefensiveItems.Zhonyas:IsReady() and Zhonyas:IsReady() then
             DefensiveItems.Zhonyas:Cast()
+            Zhonyas:Cast()
         end
         if Menu.Combo.useE then
             E:Cast(target)
@@ -163,6 +166,12 @@ function Combo()
     end
 end
 
+function Ult()
+    local target = TS.target
+    if ValidTarget(target) then
+            R:Cast(target)
+        end
+end
 
 function Harass()
     local target = TS.target
@@ -186,7 +195,6 @@ function Clear()
         end
         if Menu.LaneClear.useE then
             E:LaneClear({NumberOfHits = Menu.LaneClear.E})
-            E:LaneClear({NumberOfHits = Menu.LaneClear.E})
         end
     end
     if Menu.JungleClear.useQ then
@@ -197,6 +205,15 @@ function Clear()
     end
 end
 
+function PercentageMana(u)
+    local unit = u ~= nil and u or myHero
+    return unit and unit.mana/unit.maxMana * 100 or 0
+end
+
+function PercentageHealth(u)
+    local unit = u ~= nil and u or myHero
+    return unit and unit.health/unit.maxHealth * 100 or 0
+end
 
 
 function GetOverkill()
@@ -491,4 +508,4 @@ function _Downloader:Base64Encode(data)
         for i=1,6 do c=c+(x:sub(i,i)=='1' and 2^(6-i) or 0) end
         return b:sub(c+1,c+1)
     end)..({ '', '==', '=' })[#data%3+1])
-end
+end 
