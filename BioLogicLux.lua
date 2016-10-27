@@ -157,9 +157,8 @@ function Combo()
     local target = TS.target
     local q, w, e, r, dmg = GetBestCombo(target)
     if ValidTarget(target) then
-        if Menu.Combo.Zhonyas > 0 and PercentageHealth() <= Menu.Combo.Zhonyas and DefensiveItems.Zhonyas:IsReady() and Zhonyas:IsReady() then
+        if Menu.Combo.Zhonyas > 0 and PercentageHealth() <= Menu.Combo.Zhonyas and DefensiveItems.Zhonyas:IsReady() then
             DefensiveItems.Zhonyas:Cast()
-            Zhonyas:Cast()
         end
         if Menu.Combo.useE then
             E:Cast(target)
