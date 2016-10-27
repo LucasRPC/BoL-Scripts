@@ -1,7 +1,7 @@
 local ScriptName = "BioLogic Lux"
 local AUTOUPDATES = true
 local Author = "Da Vinci"
-local version = 1.2
+local version = 1.3
 
 if myHero.charName ~= "Lux" then return end
 
@@ -10,9 +10,6 @@ local TS, Menu = nil, nil
 local PredictedDamage = {}
 local RefreshTime = 0.4
 local DefensiveItems = nil
-local DefensiveItems = {
-    Zhonyas      = { Range = 1000 , Slot   = function() return FindItemSlot("ZhonyasHourglass") end,  reqTarget = false,  IsReady = function() return (FindItemSlot("ZhonyasHourglass") ~= nil and myHero:CanUseSpell(FindItemSlot("ZhonyasHourglass")) == READY) end,},
-}
 
 function CheckUpdate()
     if AUTOUPDATES then
@@ -41,13 +38,14 @@ function OnLoad()
     DelayAction(function() _arrangePriorities() end, 10)
     TS = TargetSelector(TARGET_LESS_CAST_PRIORITY, 3500, DAMAGE_PHYSICAL)
     Menu = scriptConfig(ScriptName.." by "..Author, ScriptName.."24052015")
-
+    DefensiveItems = {
+            Zhonyas     = _Spell({Range = 1000, Type = SPELL_TYPE.SELF}):AddSlotFunction(function() return FindItemSlot("ZhonyasHourglass") end),
+        }
     Q = _Spell({Slot = _Q, DamageName = "Q", Range = 1200, Width = 70, Delay = 0.25, Speed = 1200, Aoe = false, Collision = true, Type = SPELL_TYPE.LINEAR}):AddDraw()
     W = _Spell({Slot = _W, DamageName = "W", Range = 0, Type = SPELL_TYPE.SELF}):AddDraw()
     E = _Spell({Slot = _E, DamageName = "E", Range = 1100, Width = 330, Delay = 0.25, Speed = 1300, Aoe = false, Collision = false, Type = SPELL_TYPE.CIRCULAR}):AddDraw()
     Ignite = _Spell({Slot = FindSummonerSlot("summonerdot"), DamageName = "IGNITE", Range = 600, Type = SPELL_TYPE.TARGETTED})
     R = _Spell({Slot = _R, DamageName = "R", Range = 3300, Width = 140, Delay = 1, Speed = math.huge, Collision = false, Aoe = true, Type = SPELL_TYPE.LINEAR}):AddDraw()
-    Zhonyas = _Spell({Range = 1000, Type = SPELL_TYPE.SELF}):AddSlotFunction(function() return FindItemSlot("ZhonyasHourglass") end),
 
     Menu:addSubMenu(myHero.charName.." - Target Selector Settings", "TS")
         Menu.TS:addTS(TS)
