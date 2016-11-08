@@ -58,7 +58,7 @@ AddLoadCallback(function()
         Menu.Combo:addParam("RPANIC", "Smart Ultimate", SCRIPT_PARAM_ONOFF, true)
         Menu.Combo:addParam("RHP", "What % to ult", SCRIPT_PARAM_SLICE, 20, 0, 100, 0)
         Menu.Combo:addParam("HelpR", "Auto Revive Allies", SCRIPT_PARAM_ONOFF, false)
-        Menu.Combo:addParam("AHP", "% To Revive", SCRIPT_PARAM_SLICE, 50, 0, 100, 0)
+        Menu.Combo:addParam("AHP", "% To Revive", SCRIPT_PARAM_SLICE, 20, 0, 100, 0)
         Menu.Combo:addParam("Zhonyas", "Use Zhonyas if HP % <=", SCRIPT_PARAM_SLICE, 10, 0, 100, 0)
 
     Menu:addSubMenu(myHero.charName.." - Harass Settings", "Harass")
@@ -146,7 +146,7 @@ function Combo()
         if Menu.Combo.useE and not Q:IsReady() and not W:IsReady() then
             E:Cast(target)
         end
-        if Menu.Combo.useW and not Q:IsReady() and E:IsReady() then
+        if Menu.Combo.useW and not Q:IsReady() then
             W:Cast()
         end
         if Menu.Combo.selfE then
@@ -161,7 +161,7 @@ function Combo()
 end
 
 function Ultimate()
-    if Menu.Combo.PANICR then
+    if Menu.Combo.RPANIC then
         if PercentageHealth() <= Menu.Combo.RHP then
             if R:IsReady() and CountEnemyHeroInRange(1100) >= 1 then
                 R:Cast(myHero)
@@ -199,15 +199,15 @@ function Clear()
         if Menu.LaneClear.useQ then
             Q:LaneClear()
         end
-        if Menu.LaneClear.useW then
-            W:LaneClear()
+        if Menu.LaneClear.useW and not Q:IsReady() then
+            W:Cast()
         end
     end
     if Menu.JungleClear.useQ then
         Q:JungleClear()
     end
-    if Menu.JungleClear.useW then
-        W:JungleClear()
+    if Menu.JungleClear.useW and not Q:IsReady() then
+        W:Cast()
     end
 end
 
