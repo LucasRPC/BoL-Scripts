@@ -84,16 +84,8 @@ AddLoadCallback(function()
         Menu.Misc:addParam("SetSkin", "Select Skin", SCRIPT_PARAM_LIST, 10, {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
 
     Menu:addSubMenu(myHero.charName.." - Auto Settings", "Auto")
-        Menu.Auto:addSubMenu("Use E To Slow GapClosers", "E3")
-        _Interrupter(Menu.Auto.E3):CheckGapcloserSpells():AddCallback(
-            function(target)
-                if Menu.Auto.E3 then
-                    if E:IsReady() then
-                        CastE(target)
-                    end
-                end
-            end
-        )
+        Menu.Auto:addSubMenu("Use E To Slow Gapclosers", "E")
+        _Interrupter(Menu.Auto.E):CheckGapcloserSpells():AddCallback(function(target) E:Cast(target) end)
         
     Menu:addSubMenu(myHero.charName.." - Keys Settings", "Keys")
         OrbwalkManager:LoadCommonKeys(Menu.Keys)
