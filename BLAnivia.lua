@@ -1,8 +1,8 @@
 --[[
 
-Frosty Anivia
-By LucasRP a.k.a DaVinci
-Version: 1
+                                                      Frosty Anivia
+                                                By LucasRP a.k.a DaVinci
+                                                       Version: 1
 
 ]]
 
