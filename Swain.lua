@@ -2,7 +2,7 @@
 
                                                         BioLogic Swain
                                                    By LucasRP a.k.a DaVinci
-                                                          Version: 1
+                                                          Version: 1.1
 
 ]]
 
