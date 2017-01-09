@@ -1,3 +1,8 @@
+6.24000
+- Bundle: Fixed encryption error.
+- Veigar: Improved E, Q, R and added E for channelling/gapclose spells
+- Kassadin: Improved Casting, Added Dodge R and Q for channeling spells
+
 6.15001
 - Bundle: Fixed fatal error problem.
 
