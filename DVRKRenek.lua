@@ -120,36 +120,6 @@ function KillSteal2()
     end
 end
 
-function KillSteal()
-    local enemyHeroes = GetEnemyHeroes()
-    for _, enemy in pairs(enemyHeroes) do
-        if enemy ~= nil and ValidTarget(enemy) then
-        local distance = GetDistance(enemy)
-        local Health = enemy.health
-            if Health <= Q:Damage(enemy) and Q:IsReady() then
-                Q:Cast(enemy)
-            elseif Health <= E:Damage(enemy) then
-                E:Cast(enemy)
-            elseif Health <= (Q:Damage(enemy) + W:Damage(enemy)) and Q:IsReady() and W:IsReady() then
-                W:Cast(enemy)
-            elseif Health <= (Q:Damage(enemy) + E:Damage(enemy)) and Q:IsReady() then
-                E:Cast(enemy)
-            elseif Health <= (W:Damage(enemy) + E:Damage(enemy)) and W:IsReady() then
-                E:Cast(enemy)
-            elseif Health <= (Q:Damage(enemy) + W:Damage(enemy) + E:Damage(enemy)) and Q:IsReady() and W:IsReady() then
-                E:Cast(enemy)
-            end
-        end
-    end
-end
-
-function Checks()
-    E1READY = (mh:CanUseSpell(_E) == READY) and mh:GetSpellData(_E).name == "RenektonSliceAndDice"
-    E2READY = (mh:CanUseSpell(_E) == READY) and mh:GetSpellData(_E).name == "RenektonDice"
-end
-
-
-
 function Combo()
     local target = TS.target
     local q, w, e, r, dmg = GetBestCombo(target)
@@ -404,6 +374,34 @@ function UnitAtTower(unit)
         end
     end
     return false
+end
+
+function KillSteal()
+    local enemyHeroes = GetEnemyHeroes()
+    for _, enemy in pairs(enemyHeroes) do
+        if enemy ~= nil and ValidTarget(enemy) then
+        local distance = GetDistance(enemy)
+        local Health = enemy.health
+            if Health <= Q:Damage(enemy) and Q:IsReady() then
+                Q:Cast(enemy)
+            elseif Health <= E:Damage(enemy) then
+                E:Cast(enemy)
+            elseif Health <= (Q:Damage(enemy) + W:Damage(enemy)) and Q:IsReady() and W:IsReady() then
+                W:Cast(enemy)
+            elseif Health <= (Q:Damage(enemy) + E:Damage(enemy)) and Q:IsReady() then
+                E:Cast(enemy)
+            elseif Health <= (W:Damage(enemy) + E:Damage(enemy)) and W:IsReady() then
+                E:Cast(enemy)
+            elseif Health <= (Q:Damage(enemy) + W:Damage(enemy) + E:Damage(enemy)) and Q:IsReady() and W:IsReady() then
+                E:Cast(enemy)
+            end
+        end
+    end
+end
+
+function Checks()
+    E1READY = (mh:CanUseSpell(_E) == READY) and mh:GetSpellData(_E).name == "RenektonSliceAndDice"
+    E2READY = (mh:CanUseSpell(_E) == READY) and mh:GetSpellData(_E).name == "RenektonDice"
 end
 
 
