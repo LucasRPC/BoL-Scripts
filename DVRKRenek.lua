@@ -4,6 +4,7 @@ local Author = "Da Vinci & RK1K"
 local ScriptName = "The Reptilian"
 local AUTOUPDATE = true
 local UPDATE_HOST = "raw.githubusercontent.com"
+local ran = math.random
 local UPDATE_PATH = "/LucasRPC/BoL-Scripts/DVRKRenek.lua".."?rand="..ran(3500,5500)
 local UPDATE_FILE_PATH = SCRIPT_PATH..GetCurrentEnv().FILE_NAME
 local UPDATE_URL = "https://"..UPDATE_HOST..UPDATE_PATH
