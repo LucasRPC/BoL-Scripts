@@ -1,4 +1,4 @@
-local ScriptName = "Two Face Kayn"
+local ScriptName = "Kayn"
 local Author = "Da Vinci"
 local version = 1
 
@@ -23,7 +23,7 @@ local CastableItems = {
 } 
 
 function OnLoad()
-    print("<b><font color=\"#000000\"> | </font><font color=\"#FF0000\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Loaded succesfully")
+
     local r = _Required()
     r:Add({Name = "SimpleLib", Url = "raw.githubusercontent.com/jachicao/BoL/master/SimpleLib.lua"})
     r:Check()
@@ -56,12 +56,14 @@ function OnLoad()
     Menu:addSubMenu(myHero.charName.." - Harass Settings", "Harass")
         Menu.Harass:addParam("useQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
         Menu.Harass:addParam("useW", "Use W", SCRIPT_PARAM_ONOFF, true)
+        Menu.Harass:addParam("Mana", "Harass Min. Mana Percent: ", SCRIPT_PARAM_SLICE, 30, 0, 100, 0)
 
     Menu:addSubMenu(myHero.charName.." - LaneClear Settings", "LaneClear")
         Menu.LaneClear:addParam("useQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
         Menu.LaneClear:addParam("Q", "Use Q If Hit >= ", SCRIPT_PARAM_SLICE, 4, 0, 10)
         Menu.LaneClear:addParam("useW", "Use W", SCRIPT_PARAM_ONOFF, true)
         Menu.LaneClear:addParam("W", "Use W If Hit >= ", SCRIPT_PARAM_SLICE, 4, 0, 10)
+        Menu.LaneClear:addParam("Mana", "Clear Min. Mana Percent: ", SCRIPT_PARAM_SLICE, 30, 0, 100, 0)
 
     Menu:addSubMenu(myHero.charName.." - JungleClear Settings", "JungleClear")
         Menu.JungleClear:addParam("useQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
@@ -91,7 +93,7 @@ function OnLoad()
                 end
             end)
             Menu.Auto:addSubMenu("Use Darkin W To Interrupt", "UseW")
-                _Interrupter(Menu.Auto.UseW):CheckChannelingSpells():CheckGapcloserSpells():AddCallback(function(target) if Darkin then W:Cast(target)end end)
+                _Interrupter(Menu.Auto.UseW):CheckChannelingSpells():CheckGapcloserSpells():AddCallback(function(target) if Darkin == true then W:Cast(target)end end)
 
     Menu:addSubMenu(myHero.charName.." - Keys Settings", "Keys")
         OrbwalkManager:LoadCommonKeys(Menu.Keys)
@@ -101,10 +103,6 @@ function OnLoad()
         Menu.Keys:permaShow("Marathon")
         Menu.Keys.HarassToggle = false
         Menu.Keys.Marathon = false
-end
-
-function OnUnload()
-    print("<b><font color=\"#000000\"> | </font><font color=\"#FF0000\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Re/Un Loaded succesfully")
 end
 
 function OnTick()
@@ -184,25 +182,30 @@ end
 
 function Harass()
     local target = TS.target
-    if ValidTarget(target) then
-         if Menu.Harass.useW then
-            W:Cast(target)
-        end
-        if Menu.Harass.useQ then
-            Q:Cast(target)
+    local mana = myHero.mana / myHero.maxMana * 100
+    if mana >= Menu.Harass.Mana then
+        if ValidTarget(target) then
+             if Menu.Harass.useW then
+                W:Cast(target)
+            end
+            if Menu.Harass.useQ then
+                Q:Cast(target)
+            end
         end
     end
 end
 
 
 function Clear()
-
+    local mana = myHero.mana / myHero.maxMana * 100
+    if mana >= Menu.LaneClear.Mana then
         if Menu.LaneClear.useQ then
             Q:LaneClear({NumberOfHits = Menu.LaneClear.Q})
         end
         if Menu.LaneClear.useW then
             W:LaneClear({NumberOfHits = Menu.LaneClear.W})
         end
+    end
                 
     if Menu.JungleClear.useQ then
         Q:JungleClear()
