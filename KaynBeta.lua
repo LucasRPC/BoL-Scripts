@@ -32,7 +32,7 @@ function OnLoad()
     if OrbwalkManager == nil then print("Check your SimpleLib file, isn't working... The script can't load without SimpleLib. Try to copy-paste the entire SimpleLib.lua on your common folder.") return end
     DelayAction(function() CheckUpdate() end, 5)
     DelayAction(function() _arrangePriorities() end, 10)
-    TS = TargetSelector(TARGET_LESS_CAST_PRIORITY, 1000, DAMAGE_PHYSICAL)
+    TS = _SimpleTargetSelector(TARGET_LESS_CAST_PRIORITY, 1000, DAMAGE_PHYSICAL)
     Menu = scriptConfig(ScriptName.." by "..Author, ScriptName.."24052015")
 
     Q = _Spell({Slot = _Q, DamageName = "Q", Range = 560, Width = 0, Delay = 0.15, Speed = 500, Aoe = true, Collision = false, Type = SPELL_TYPE.CIRCULAR}):AddDraw()
@@ -41,10 +41,7 @@ function OnLoad()
     Ignite = _Spell({Slot = FindSummonerSlot("summonerdot"), DamageName = "IGNITE", Range = 600, Type = SPELL_TYPE.TARGETTED})
     R = _Spell({Slot = _R, DamageName = "R", Range = 550, Type = SPELL_TYPE.TARGETTED}):AddDraw()
 
-    Menu:addSubMenu(myHero.charName.." - Target Selector Settings", "TS")
-        Menu.TS:addTS(TS)
-        _Circle({Menu = Menu.TS, Name = "Draw", Text = "Draw circle on Target", Source = function() return TS.target end, Range = 120, Condition = function() return ValidTarget(TS.target, TS.range) end, Color = {255, 255, 0, 0}, Width = 4})
-        _Circle({Menu = Menu.TS, Name = "Range", Text = "Draw circle for Range", Range = function() return TS.range end, Color = {255, 255, 0, 0}, Enable = false})
+    Menu.TS:addTS(TS)
 
     Menu:addSubMenu(myHero.charName.." - Combo Settings", "Combo")
         Menu.Combo:addParam("Overkill", "Overkill % for Dmg Predict..", SCRIPT_PARAM_SLICE, 10, 0, 100, 0)
