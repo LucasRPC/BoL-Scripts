@@ -31,12 +31,17 @@ local CastableItems = {
 
 function OnLoad()
     Updater()
+    local function UpdateSimpleLib()
+        if FileExist(LIB_PATH .. "SimpleLib.lua") then
+          require("SimpleLib")
+        else
+          DownloadFile("https://raw.githubusercontent.com/jachicao/BoL/master/SimpleLib.lua", LIB_PATH .. "SimpleLib.lua", function() UpdateSimpleLib() end)
+        end
+    end
+
+    UpdateSimpleLib()
     print("<b><font color=\"#000000\"> | </font><font color=\"#FF0000\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Loaded succesfully")
-    local r = _Required()
-    r:Add({Name = "SimpleLib", Url = "raw.githubusercontent.com/jachicao/BoL/master/SimpleLib.lua"})
-    r:Check()
     if OrbwalkManager.GotReset then return end
-    if r:IsDownloading() then return end
     if OrbwalkManager == nil then print("Check your SimpleLib file, isn't working... The script can't load without SimpleLib. Try to copy-paste the entire SimpleLib.lua on your common folder.") return end
     DelayAction(function() CheckUpdate() end, 5)
     DelayAction(function() _arrangePriorities() end, 10)
@@ -49,7 +54,7 @@ function OnLoad()
     Ignite = _Spell({Slot = FindSummonerSlot("summonerdot"), DamageName = "IGNITE", Range = 600, Type = SPELL_TYPE.TARGETTED})
     R = _Spell({Slot = _R, DamageName = "R", Range = 550, Type = SPELL_TYPE.TARGETTED}):AddDraw()
 
-    Menu.TS:addTS(TS)
+    TS:AddToMenu(Menu)
 
     Menu:addSubMenu(myHero.charName.." - Combo Settings", "Combo")
         Menu.Combo:addParam("Overkill", "Overkill % for Dmg Predict..", SCRIPT_PARAM_SLICE, 10, 0, 100, 0)
@@ -102,7 +107,7 @@ function OnLoad()
             Menu.Auto:addSubMenu("Use R To Evade", "UseR")
             _Evader(Menu.Auto.UseR):CheckCC():AddCallback(
                 function(target)
-                    if Menu.Auto.R2 and R:IsReady() and IsValidTarget(target) and RP then
+                    if Menu.Auto.R2 and R:IsReady() and IsValidTarget(target) then
                         R:Cast(target)
                     end
                 end)
@@ -161,7 +166,7 @@ function KillSteal()
             if dmg >= enemy.health then
                 if Menu.KillSteal.useQ and Q:Damage(enemy) >= enemy.health and not enemy.dead then Q:Cast(enemy) end
                 if Menu.KillSteal.useW and W:Damage(enemy) >= enemy.health and not enemy.dead then W:Cast(enemy) end
-                if Menu.KillSteal.useR and RP and R:Damage(enemy) >= enemy.health and not enemy.dead then R:Cast(enemy) end
+                if Menu.KillSteal.useR and R:Damage(enemy) >= enemy.health and not enemy.dead then R:Cast(enemy) end
             end
             if Menu.KillSteal.useIgnite and Ignite:IsReady() and Ignite:Damage(enemy) >= enemy.health and not enemy.dead then Ignite:Cast(enemy) end
         end
@@ -175,14 +180,14 @@ function Combo()
         if Menu.Combo.useW then
             W:Cast(target)
         end
-        if Menu.Combo.Q1 > 1 then
-            if Menu.Combo.Q == 2 then
+        if Menu.Combo.useQ > 1 then
+            if Menu.Combo.useQ == 2 then
                 Q:Cast(target)
-            elseif Menu.Combo.Q == 3 then
+            elseif Menu.Combo.useQ == 3 then
                 CastSpell(_Q, mousePos.x, mousePos.z)
             end
         end
-        if Menu.Combo.useR and RP and (W:Damage(enemy)+Q:Damage(enemy)+R:Damage(enemy)> target.health) then
+        if Menu.Combo.useR and RP and (W:Damage(target)+Q:Damage(target)+R:Damage(target)> target.health) then
             R:Cast(target)
         end
         if Menu.Combo.useQGP and GetDistanceSqr(target) > 600*600 then
@@ -201,10 +206,10 @@ function Harass()
              if Menu.Harass.useW then
                 W:Cast(target)
             end
-            if Menu.Harass.Q > 1 then
-                if Menu.Harass.Q == 2 then
+            if Menu.Harass.useQ > 1 then
+                if Menu.Harass.useQ == 2 then
                     Q:Cast(target)
-                elseif Menu.Harass.Q == 3 then
+                elseif Menu.Harass.useQ == 3 then
                     CastSpell(_Q, mousePos.x, mousePos.z)
                 end
             end
@@ -419,193 +424,6 @@ function UnitAtTower(unit)
 end
 
 
-class "_Required"
-function _Required:__init()
-    self.requirements = {}
-    self.downloading = {}
-    return self
-end
-
-function _Required:Add(t)
-    assert(t and type(t) == "table", "_Required: table is invalid!")
-    local name = t.Name
-    assert(name and type(name) == "string", "_Required: name is invalid!")
-    local url = t.Url
-    assert(url and type(url) == "string", "_Required: url is invalid!")
-    local extension = t.Extension ~= nil and t.Extension or "lua"
-    local usehttps = t.UseHttps ~= nil and t.UseHttps or true
-    table.insert(self.requirements, {Name = name, Url = url, Extension = extension, UseHttps = usehttps})
-end
-
-function _Required:Check()
-    for i, tab in pairs(self.requirements) do
-        local name = tab.Name
-        local url = tab.Url
-        local extension = tab.Extension
-        local usehttps = tab.UseHttps
-        if not FileExist(LIB_PATH..name.."."..extension) then
-            print("Downloading a required library called "..name.. ". Please wait...")
-            local d = _Downloader(tab)
-            table.insert(self.downloading, d)
-        end
-    end
-    
-    if #self.downloading > 0 then
-        for i = 1, #self.downloading, 1 do 
-            local d = self.downloading[i]
-            AddTickCallback(function() d:Download() end)
-        end
-        self:CheckDownloads()
-    else
-        for i, tab in pairs(self.requirements) do
-            local name = tab.Name
-            local url = tab.Url
-            local extension = tab.Extension
-            local usehttps = tab.UseHttps
-            if FileExist(LIB_PATH..name.."."..extension) and extension == "lua" then
-                require(name)
-            end
-        end
-    end
-end
-
-function _Required:CheckDownloads()
-    if #self.downloading == 0 then 
-        print("Required libraries downloaded. Please reload with 2x F9.")
-    else
-        for i = 1, #self.downloading, 1 do
-            local d = self.downloading[i]
-            if d.GotScript then
-                table.remove(self.downloading, i)
-                break
-            end
-        end
-        DelayAction(function() self:CheckDownloads() end, 2) 
-    end 
-end
-
-function _Required:IsDownloading()
-    return self.downloading ~= nil and #self.downloading > 0 or false
-end
-
-class "_Downloader"
-function _Downloader:__init(t)
-    local name = t.Name
-    local url = t.Url
-    local extension = t.Extension ~= nil and t.Extension or "lua"
-    local usehttps = t.UseHttps ~= nil and t.UseHttps or true
-    self.SavePath = LIB_PATH..name.."."..extension
-    self.ScriptPath = '/BoL/TCPUpdater/GetScript'..(usehttps and '5' or '6')..'.php?script='..self:Base64Encode(url)..'&rand='..math.random(99999999)
-    self:CreateSocket(self.ScriptPath)
-    self.DownloadStatus = 'Connect to Server'
-    self.GotScript = false
-end
-
-function _Downloader:CreateSocket(url)
-    if not self.LuaSocket then
-        self.LuaSocket = require("socket")
-    else
-        self.Socket:close()
-        self.Socket = nil
-        self.Size = nil
-        self.RecvStarted = false
-    end
-    self.Socket = self.LuaSocket.tcp()
-    if not self.Socket then
-        print('Socket Error')
-    else
-        self.Socket:settimeout(0, 'b')
-        self.Socket:settimeout(99999999, 't')
-        self.Socket:connect('sx-bol.eu', 80)
-        self.Url = url
-        self.Started = false
-        self.LastPrint = ""
-        self.File = ""
-    end
-end
-
-function _Downloader:Download()
-    if self.GotScript then return end
-    self.Receive, self.Status, self.Snipped = self.Socket:receive(1024)
-    if self.Status == 'timeout' and not self.Started then
-        self.Started = true
-        self.Socket:send("GET "..self.Url.." HTTP/1.1\r\nHost: sx-bol.eu\r\n\r\n")
-    end
-    if (self.Receive or (#self.Snipped > 0)) and not self.RecvStarted then
-        self.RecvStarted = true
-        self.DownloadStatus = 'Downloading Script (0%)'
-    end
-
-    self.File = self.File .. (self.Receive or self.Snipped)
-    if self.File:find('</si'..'ze>') then
-        if not self.Size then
-            self.Size = tonumber(self.File:sub(self.File:find('<si'..'ze>')+6,self.File:find('</si'..'ze>')-1))
-        end
-        if self.File:find('<scr'..'ipt>') then
-            local _,ScriptFind = self.File:find('<scr'..'ipt>')
-            local ScriptEnd = self.File:find('</scr'..'ipt>')
-            if ScriptEnd then ScriptEnd = ScriptEnd - 1 end
-            local DownloadedSize = self.File:sub(ScriptFind+1,ScriptEnd or -1):len()
-            self.DownloadStatus = 'Downloading Script ('..math.round(100/self.Size*DownloadedSize,2)..'%)'
-        end
-    end
-    if self.File:find('</scr'..'ipt>') then
-        self.DownloadStatus = 'Downloading Script (100%)'
-        local a,b = self.File:find('\r\n\r\n')
-        self.File = self.File:sub(a,-1)
-        self.NewFile = ''
-        for line,content in ipairs(self.File:split('\n')) do
-            if content:len() > 5 then
-                self.NewFile = self.NewFile .. content
-            end
-        end
-        local HeaderEnd, ContentStart = self.NewFile:find('<sc'..'ript>')
-        local ContentEnd, _ = self.NewFile:find('</scr'..'ipt>')
-        if not ContentStart or not ContentEnd then
-            if self.CallbackError and type(self.CallbackError) == 'function' then
-                self.CallbackError()
-            end
-        else
-            local newf = self.NewFile:sub(ContentStart+1,ContentEnd-1)
-            local newf = newf:gsub('\r','')
-            if newf:len() ~= self.Size then
-                if self.CallbackError and type(self.CallbackError) == 'function' then
-                    self.CallbackError()
-                end
-                return
-            end
-            local newf = Base64Decode(newf)
-            if type(load(newf)) ~= 'function' then
-                if self.CallbackError and type(self.CallbackError) == 'function' then
-                    self.CallbackError()
-                end
-            else
-                local f = io.open(self.SavePath,"w+b")
-                f:write(newf)
-                f:close()
-                if self.CallbackUpdate and type(self.CallbackUpdate) == 'function' then
-                    self.CallbackUpdate(self.OnlineVersion,self.LocalVersion)
-                end
-            end
-        end
-        self.GotScript = true
-    end
-end
-
-function _Downloader:Base64Encode(data)
-    local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-    return ((data:gsub('.', function(x)
-        local r,b='',x:byte()
-        for i=8,1,-1 do r=r..(b%2^i-b%2^(i-1)>0 and '1' or '0') end
-        return r;
-    end)..'0000'):gsub('%d%d%d?%d?%d?%d?', function(x)
-        if (#x < 6) then return '' end
-        local c=0
-        for i=1,6 do c=c+(x:sub(i,i)=='1' and 2^(6-i) or 0) end
-        return b:sub(c+1,c+1)
-    end)..({ '', '==', '=' })[#data%3+1])
-end
-
 function PrintMessage(arg1, arg2)
     local a, b = "", ""
     if arg2 ~= nil then
@@ -638,4 +456,3 @@ function Updater()
         end
     end
 end
-
