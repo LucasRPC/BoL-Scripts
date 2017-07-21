@@ -1,6 +1,13 @@
 local ScriptName = "Two-Face Kayn"
 local Author = "Da Vinci"
-local version = 1
+local version = 1.1
+local AUTOUPDATE = true
+local ran = math.random
+local UPDATE_HOST = "raw.githubusercontent.com"
+local UPDATE_PATH = "/LucasRPC/BoL-Scripts/TFKayn.lua".."?rand="..ran(3500,5500)
+local UPDATE_FILE_PATH = SCRIPT_PATH..GetCurrentEnv().FILE_NAME
+local UPDATE_URL = "https://"..UPDATE_HOST..UPDATE_PATH
+local FileName = _ENV.FILE_NAME
 
 if myHero.charName ~= "Kayn" then return end
 
@@ -23,6 +30,7 @@ local CastableItems = {
 } 
 
 function OnLoad()
+    Updater()
     print("<b><font color=\"#000000\"> | </font><font color=\"#FF0000\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Loaded succesfully")
     local r = _Required()
     r:Add({Name = "SimpleLib", Url = "raw.githubusercontent.com/jachicao/BoL/master/SimpleLib.lua"})
@@ -33,7 +41,7 @@ function OnLoad()
     DelayAction(function() CheckUpdate() end, 5)
     DelayAction(function() _arrangePriorities() end, 10)
     TS = _SimpleTargetSelector(TARGET_LESS_CAST_PRIORITY, 1000, DAMAGE_PHYSICAL)
-    Menu = scriptConfig(ScriptName.." by "..Author, ScriptName.."24052015")
+    Menu = scriptConfig(ScriptName.." by "..Author, ScriptName.."24052017")
 
     Q = _Spell({Slot = _Q, DamageName = "Q", Range = 560, Width = 0, Delay = 0.15, Speed = 500, Aoe = true, Collision = false, Type = SPELL_TYPE.CIRCULAR}):AddDraw()
     W = _Spell({Slot = _W, DamageName = "W", Range = 700, Width = 100, Delay = 0.55, Speed = 500, Aoe = true, Collision = false, Type = SPELL_TYPE.LINEAR}):AddDraw()
@@ -41,17 +49,17 @@ function OnLoad()
     Ignite = _Spell({Slot = FindSummonerSlot("summonerdot"), DamageName = "IGNITE", Range = 600, Type = SPELL_TYPE.TARGETTED})
     R = _Spell({Slot = _R, DamageName = "R", Range = 550, Type = SPELL_TYPE.TARGETTED}):AddDraw()
 
-    TS:AddToMenu(Menu)
+    Menu.TS:addTS(TS)
 
     Menu:addSubMenu(myHero.charName.." - Combo Settings", "Combo")
         Menu.Combo:addParam("Overkill", "Overkill % for Dmg Predict..", SCRIPT_PARAM_SLICE, 10, 0, 100, 0)
-        Menu.Combo:addParam("useQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
+        Menu.Combo:addParam("useQ", "Use Q", SCRIPT_PARAM_LIST, 2, {"Never", "WithPred", "MousePos"})
+        Menu.Combo:addParam("useQGP", "Gapclose with Q", SCRIPT_PARAM_ONOFF, false)
         Menu.Combo:addParam("useW", "Use W", SCRIPT_PARAM_ONOFF, true)
-        --Menu.Combo:addParam("useE", "Use E", SCRIPT_PARAM_ONOFF, true)
         Menu.Combo:addParam("useR", "Use R (Beta)", SCRIPT_PARAM_ONOFF, false)
 
     Menu:addSubMenu(myHero.charName.." - Harass Settings", "Harass")
-        Menu.Harass:addParam("useQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
+        Menu.Harass:addParam("useQ", "Use Q", SCRIPT_PARAM_LIST, 2, {"Never", "WithPred", "MousePos"})
         Menu.Harass:addParam("useW", "Use W", SCRIPT_PARAM_ONOFF, true)
         Menu.Harass:addParam("Mana", "Harass Min. Mana Percent: ", SCRIPT_PARAM_SLICE, 30, 0, 100, 0)
 
@@ -67,30 +75,42 @@ function OnLoad()
         Menu.JungleClear:addParam("useW", "Use W", SCRIPT_PARAM_ONOFF, true)
 
     Menu:addSubMenu(myHero.charName.." - KillSteal Settings", "KillSteal")
-        Menu.KillSteal:addParam("useIgnite", "Use Ignite", SCRIPT_PARAM_ONOFF, true)
         Menu.KillSteal:addParam("useQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
         Menu.KillSteal:addParam("useW", "Use W", SCRIPT_PARAM_ONOFF, true)
         Menu.KillSteal:addParam("useR", "Use R", SCRIPT_PARAM_ONOFF, true)
         Menu.KillSteal:addParam("KillSteal", "Use Smart Kill Steal", SCRIPT_PARAM_ONOFF, false)
+        Menu.KillSteal:addParam("useIgnite", "Use Ignite", SCRIPT_PARAM_ONOFF, true)
 
         Menu:addSubMenu(myHero.charName.." - Auto Settings", "Auto")
             Menu.Auto:addSubMenu("Use Q To Evade", "UseQ")
-        _Evader(Menu.Auto.UseQ):CheckCC():AddCallback(
-            function(target)
-                if Q:IsReady() and IsValidTarget(target) then
-                    local Position = Vector(mh) + Vector(Vector(target) - Vector(mh)):normalized():perpendicular() * 350
-                    local Position2 = Vector(mh) + Vector(Vector(target) - Vector(mh)):normalized():perpendicular2() * 350
-                    if not Collides(Position) then
-                        Q:CastToVector(Position)
-                    elseif not Collides(Position2) then
-                        Q:CastToVector(Position2)
-                    else
-                        Q:CastToVector(Position)
+            _Evader(Menu.Auto.UseQ):CheckCC():AddCallback(
+                function(target)
+                    if Q:IsReady() and IsValidTarget(target) and Menu.Auto.Q2 then
+                        local Position = Vector(myHero) + Vector(Vector(target) - Vector(mh)):normalized():perpendicular() * 350
+                        local Position2 = Vector(myHero) + Vector(Vector(target) - Vector(mh)):normalized():perpendicular2() * 350
+                        if not Collides(Position) then
+                            Q:CastToVector(Position)
+                        elseif not Collides(Position2) then
+                            Q:CastToVector(Position2)
+                        else
+                            Q:CastToVector(Position)
+                        end
                     end
-                end
-            end)
+                end)
+            Menu.Auto:addParam("Q2", "Use Q To Evade", SCRIPT_PARAM_ONOFF, false)
+            --[RVADE-START]--
+            Menu.Auto:addSubMenu("Use R To Evade", "UseR")
+            _Evader(Menu.Auto.UseR):CheckCC():AddCallback(
+                function(target)
+                    if Menu.Auto.R2 and R:IsReady() and IsValidTarget(target) and RP then
+                        R:Cast(target)
+                    end
+                end)
+            Menu.Auto:addParam("R2", "Use R To Evade", SCRIPT_PARAM_ONOFF, false)
+            --[RVADE-END]-- 
             Menu.Auto:addSubMenu("Use Darkin W To Interrupt", "UseW")
                 _Interrupter(Menu.Auto.UseW):CheckChannelingSpells():CheckGapcloserSpells():AddCallback(function(target) if Darkin == true then W:Cast(target)end end)
+
 
     Menu:addSubMenu(myHero.charName.." - Keys Settings", "Keys")
         OrbwalkManager:LoadCommonKeys(Menu.Keys)
@@ -136,30 +156,14 @@ end
 
 function KillSteal()
     for idx, enemy in ipairs(GetEnemyHeroes()) do
-      local eh = enemy.health
-      local ed = enemy.dead
-        if ValidTarget(enemy, TS.range) and eh > 0 and eh/enemy.maxHealth <= 0.3 then
+        if ValidTarget(enemy, TS.range) and enemy.health > 0 and enemy.health/enemy.maxHealth <= 0.3 then
             local q, w, e, r, dmg = GetBestCombo(enemy)
-            if dmg >= eh then
-                if Menu.KillSteal.useQ and Q:Damage(enemy) >= eh and not ed then Q:Cast(enemy) end
-                if Menu.KillSteal.useW and W:Damage(enemy) >= eh and not ed then W:Cast(enemy) end
-                if Menu.KillSteal.useR and R:Damage(enemy) >= eh and not ed then R:Cast(enemy) end
-                --if Menu.KillSteal.KillSteal then
-                    --if eh <= Q:Damage(enemy) and Q:IsReady() then
-                        --Q:Cast(enemy)
-                    --elseif eh <= R:Damage(enemy) then
-                        --R:Cast(enemy)
-                    --elseif eh <= W:Damage(enemy) then
-                        ---W:Cast(enemy)
-                    --elseif eh <= (Q:Damage(enemy) + W:Damage(enemy)) and Q:IsReady() and W:IsReady() then
-                        --Q:Cast(enemy)
-                    --elseif eh <= (Q:Damage(enemy) + W:Damage(enemy) + R:Damage(enemy)) and Q:IsReady() and W:IsReady() then
-                        --Q:Cast(enemy)
-                    --end
-                --end
-
+            if dmg >= enemy.health then
+                if Menu.KillSteal.useQ and Q:Damage(enemy) >= enemy.health and not enemy.dead then Q:Cast(enemy) end
+                if Menu.KillSteal.useW and W:Damage(enemy) >= enemy.health and not enemy.dead then W:Cast(enemy) end
+                if Menu.KillSteal.useR and RP and R:Damage(enemy) >= enemy.health and not enemy.dead then R:Cast(enemy) end
             end
-            if Menu.KillSteal.useIgnite and Ignite:IsReady() and Ignite:Damage(enemy) >= eh and not ed then Ignite:Cast(enemy) end
+            if Menu.KillSteal.useIgnite and Ignite:IsReady() and Ignite:Damage(enemy) >= enemy.health and not enemy.dead then Ignite:Cast(enemy) end
         end
     end
 end
@@ -171,11 +175,18 @@ function Combo()
         if Menu.Combo.useW then
             W:Cast(target)
         end
-        if Menu.Combo.useQ then
-            Q:Cast(target)
+        if Menu.Combo.Q1 > 1 then
+            if Menu.Combo.Q == 2 then
+                Q:Cast(target)
+            elseif Menu.Combo.Q == 3 then
+                CastSpell(_Q, mousePos.x, mousePos.z)
+            end
         end
-        if Menu.Combo.useR and RP then
+        if Menu.Combo.useR and RP and (W:Damage(enemy)+Q:Damage(enemy)+R:Damage(enemy)> target.health) then
             R:Cast(target)
+        end
+        if Menu.Combo.useQGP and GetDistanceSqr(target) > 600*600 then
+            CastSpell(_Q, mousePos.x, mousePos.z)
         end
         UseItems(target)  
     end
@@ -190,8 +201,12 @@ function Harass()
              if Menu.Harass.useW then
                 W:Cast(target)
             end
-            if Menu.Harass.useQ then
-                Q:Cast(target)
+            if Menu.Harass.Q > 1 then
+                if Menu.Harass.Q == 2 then
+                    Q:Cast(target)
+                elseif Menu.Harass.Q == 3 then
+                    CastSpell(_Q, mousePos.x, mousePos.z)
+                end
             end
         end
     end
@@ -263,7 +278,8 @@ end)
 
 
 function GetOverkill()
-    return (100 + Menu.Combo.Overkill)/100
+    local over = (100 + Menu.Combo.Overkill)/100
+    return over
 end
 
 function GetBestCombo(target)
@@ -589,3 +605,37 @@ function _Downloader:Base64Encode(data)
         return b:sub(c+1,c+1)
     end)..({ '', '==', '=' })[#data%3+1])
 end
+
+function PrintMessage(arg1, arg2)
+    local a, b = "", ""
+    if arg2 ~= nil then
+        a = arg1
+        b = arg2
+    else
+        a = ScriptName
+        b = arg1
+    end
+    print("<font color=\"#6699ff\"><b>" .. a .. ":</b></font> <font color=\"#FFFFFF\">" .. b .. "</font>")
+end
+
+
+function Updater()
+    if AUTOUPDATE then
+        local ServerData = GetWebResult(UPDATE_HOST, "/LucasRPC/BoL-Scripts/version/Kayn.version")
+            if ServerData then
+                ServerVersion = type(tonumber(ServerData)) == "number" and tonumber(ServerData) or nil
+                    if ServerVersion then
+                        if tonumber(version) < ServerVersion then
+                            DelayAction(function() print("<font color=\"#000000\"> | </font><font color=\"#FF0000\"><font color=\"#FFFFFF\">New version found for Two-Face Kayn... <font color=\"#000000\"> | </font><font color=\"#FF0000\"></font><font color=\"#FF0000\"><b> Version "..ServerVersion.."</b></font>") end, 3)
+                            DelayAction(function() print("<font color=\"#FFFFFF\"><b> >> Updating, please don't press F9 << </b></font>") end, 4)
+                            DelayAction(function() DownloadFile(UPDATE_URL, UPDATE_FILE_PATH, function () print("<font color=\"#000000\"> | </font><font color=\"#FF0000\"><font color=\"#FFFFFF\">Two-Face Kayn</font> <font color=\"#000000\"> | </font><font color=\"#FF0000\">UPDATED <font color=\"#FF0000\"><b>("..version.." => "..ServerVersion..")</b></font> Press F9 twice to load the updated version.") end) end, 5)
+                        else
+                            DelayAction(function() print("<b><font color=\"#000000\"> | </font><font color=\"#FF0000\"><font color=\"#FFFFFF\">Two-Face Kayn</font><font color=\"#000000\"> | </font><font color=\"#FF0000\"><font color=\"#FF0000\"> Version "..ServerVersion.."</b></font>") end, 1)
+                        end
+                    end
+                else
+            DelayAction(function() print("<font color=\"#FFFFFF\">Two-Face Kayn - Error while downloading version info, RE-DOWNLOAD MANUALLY.</font>")end, 1)
+        end
+    end
+end
+
