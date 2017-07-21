@@ -190,7 +190,7 @@ function Combo()
         if Menu.Combo.useR and RP and (W:Damage(target)+Q:Damage(target)+R:Damage(target)> target.health) then
             R:Cast(target)
         end
-        if Menu.Combo.useQGP and GetDistanceSqr(target) > 600*600 then
+        if Menu.Combo.useQGP and GetDistanceSqr(target) > 500*500 then
             CastSpell(_Q, mousePos.x, mousePos.z)
         end
         UseItems(target)  
