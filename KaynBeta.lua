@@ -1,4 +1,4 @@
-local ScriptName = "Kayn"
+local ScriptName = "Two Face Kayn"
 local Author = "Da Vinci"
 local version = 1
 
@@ -23,7 +23,7 @@ local CastableItems = {
 } 
 
 function OnLoad()
-
+    print("<b><font color=\"#000000\"> | </font><font color=\"#FFFFFF\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Loaded succesfully")
     local r = _Required()
     r:Add({Name = "SimpleLib", Url = "raw.githubusercontent.com/jachicao/BoL/master/SimpleLib.lua"})
     r:Check()
@@ -104,6 +104,10 @@ function OnLoad()
         Menu.Keys.HarassToggle = false
         Menu.Keys.Marathon = false
 end
+
+function OnUnload()
+     print("<b><font color=\"#000000\"> | </font><font color=\"#FFFFFF\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Re/Un Loaded succesfully")
+ end
 
 function OnTick()
     if Menu == nil then return end
