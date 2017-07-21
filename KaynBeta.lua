@@ -41,7 +41,7 @@ function OnLoad()
     Ignite = _Spell({Slot = FindSummonerSlot("summonerdot"), DamageName = "IGNITE", Range = 600, Type = SPELL_TYPE.TARGETTED})
     R = _Spell({Slot = _R, DamageName = "R", Range = 550, Type = SPELL_TYPE.TARGETTED}):AddDraw()
 
-    Menu.TS:addTS(TS)
+    TS:AddToMenu(Menu)
 
     Menu:addSubMenu(myHero.charName.." - Combo Settings", "Combo")
         Menu.Combo:addParam("Overkill", "Overkill % for Dmg Predict..", SCRIPT_PARAM_SLICE, 10, 0, 100, 0)
