@@ -1,4 +1,4 @@
-local ScriptName = "Two Face Kayn"
+local ScriptName = "Two-Face Kayn"
 local Author = "Da Vinci"
 local version = 1
 
@@ -23,7 +23,7 @@ local CastableItems = {
 } 
 
 function OnLoad()
-    print("<b><font color=\"#000000\"> | </font><font color=\"#FFFFFF\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Loaded succesfully")
+    print("<b><font color=\"#000000\"> | </font><font color=\"#FF0000\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Loaded succesfully")
     local r = _Required()
     r:Add({Name = "SimpleLib", Url = "raw.githubusercontent.com/jachicao/BoL/master/SimpleLib.lua"})
     r:Check()
@@ -35,8 +35,8 @@ function OnLoad()
     TS = TargetSelector(TARGET_LESS_CAST_PRIORITY, 1000, DAMAGE_PHYSICAL)
     Menu = scriptConfig(ScriptName.." by "..Author, ScriptName.."24052015")
 
-    Q = _Spell({Slot = _Q, DamageName = "Q", Range = 550, Width = 100, Delay = 0.15, Speed = 500, Aoe = true, Collision = false, Type = SPELL_TYPE.LINEAR}):AddDraw()
-    W = _Spell({Slot = _W, DamageName = "W", Range = 700, Width = 175, Delay = 0.55, Speed = 500, Aoe = true, Collision = false, Type = SPELL_TYPE.LINEAR}):AddDraw()
+    Q = _Spell({Slot = _Q, DamageName = "Q", Range = 560, Width = 0, Delay = 0.15, Speed = 500, Aoe = true, Collision = false, Type = SPELL_TYPE.CIRCULAR}):AddDraw()
+    W = _Spell({Slot = _W, DamageName = "W", Range = 700, Width = 100, Delay = 0.55, Speed = 500, Aoe = true, Collision = false, Type = SPELL_TYPE.LINEAR}):AddDraw()
     E = _Spell({Slot = _E, DamageName = "E", Range = 400, Type = SPELL_TYPE.SELF}):AddDraw()
     Ignite = _Spell({Slot = FindSummonerSlot("summonerdot"), DamageName = "IGNITE", Range = 600, Type = SPELL_TYPE.TARGETTED})
     R = _Spell({Slot = _R, DamageName = "R", Range = 550, Type = SPELL_TYPE.TARGETTED}):AddDraw()
@@ -106,7 +106,7 @@ function OnLoad()
 end
 
 function OnUnload()
-     print("<b><font color=\"#000000\"> | </font><font color=\"#FFFFFF\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Re/Un Loaded succesfully")
+     print("<b><font color=\"#000000\"> | </font><font color=\"#FF0000\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Re/Un Loaded succesfully")
  end
 
 function OnTick()
@@ -124,6 +124,7 @@ function OnTick()
     if AS then
         W.Delay = 0.6
         W.Range = 900
+        R.Range = 750
     end
     if Menu.Keys.Marathon then
        myHero:MoveTo(mousePos.x, mousePos.z)
