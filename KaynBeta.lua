@@ -23,7 +23,7 @@ local CastableItems = {
 } 
 
 function OnLoad()
-    print("<b><font color=\"#000000\"> | </font><font color=\"#FFFFFF\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Re/Un Loaded succesfully")
+    print("<b><font color=\"#000000\"> | </font><font color=\"#FF0000\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Loaded succesfully")
     local r = _Required()
     r:Add({Name = "SimpleLib", Url = "raw.githubusercontent.com/jachicao/BoL/master/SimpleLib.lua"})
     r:Check()
@@ -104,7 +104,7 @@ function OnLoad()
 end
 
 function OnUnload()
-    print("<b><font color=\"#000000\"> | </font><font color=\"#FFFFFF\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Re/Un Loaded succesfully")
+    print("<b><font color=\"#000000\"> | </font><font color=\"#FF0000\">Two Face Kayn</font><font color=\"#000000\"> | </font></b><font color=\"#00FFFF\"> Re/Un Loaded succesfully")
 end
 
 function OnTick()
