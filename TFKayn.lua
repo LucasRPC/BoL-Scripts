@@ -1,6 +1,6 @@
 local ScriptName = "Two-Face Kayn"
 local Author = "Da Vinci"
-local version = 1.1
+local version = 1.2
 local AUTOUPDATE = true
 local ran = math.random
 local UPDATE_HOST = "raw.githubusercontent.com"
@@ -183,14 +183,14 @@ function Combo()
         if Menu.Combo.useQ > 1 then
             if Menu.Combo.useQ == 2 then
                 Q:Cast(target)
-            elseif Menu.Combo.useQ == 3 then
+            elseif Menu.Combo.useQ == 3 and GetDistanceSqr(target) > 500*500 then
                 CastSpell(_Q, mousePos.x, mousePos.z)
             end
         end
         if Menu.Combo.useR and RP and (W:Damage(target)+Q:Damage(target)+R:Damage(target)> target.health) then
             R:Cast(target)
         end
-        if Menu.Combo.useQGP and GetDistanceSqr(target) > 500*500 then
+        if Menu.Combo.useQGP and GetDistanceSqr(target) < 600*600 then
             CastSpell(_Q, mousePos.x, mousePos.z)
         end
         UseItems(target)  
