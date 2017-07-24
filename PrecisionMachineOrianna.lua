@@ -42,7 +42,7 @@ function OnLoad()
     LastFarmRequest = 0
     ValidDistance = 2000
     UpdateSimpleLib()
-    DelayAction(function() SexyPrint("σяιαииα ву ∂α νιиςι ℓσα∂є∂ ѕυςςєѕfυℓℓу") end, 5)
+    DelayAction(function() SexyPrint("Orianna by Da Vinci Loaded Succesfully.") end, 5)
     if OrbwalkManager.GotReset then return end
     if VIP_USER then HookPackets() end
     if OrbwalkManager == nil then print("Check your SimpleLib file, isn't working... The script can't load without SimpleLib. Try to copy-paste the entire SimpleLib.lua on your common folder.") return end
@@ -542,9 +542,9 @@ function CountEnemies(point, range)
 end
 
 function SexyPrint(message)
-   local sexyName = "<font color=\"#15317E\">[<b><i>ρяєςιѕισи мαςнιиє</i></b>]</font>"
-   local fontColor = "4E387E"
-   print(sexyName .. " <b><font color=\"#" .. fontColor .. "\">" .. message .. "</font></b>")
+   local sexyName = "<font color=\"#E41B17\">[<b>Precision Machine</b>]:</font>"
+   local fontColor = "FFFFFF"
+   print(sexyName .. " <font color=\"#" .. fontColor .. "\">" .. message .. "</font>")
 end
 
 function GetOverkill()
