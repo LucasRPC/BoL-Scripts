@@ -58,7 +58,7 @@ AddLoadCallback(function()
     Q = _Spell({Slot = _Q, DamageName = "Q", Range = 1075, Width = 110, Delay = 0.25, Speed = 850, Aoe = false, Collision = false, Type = SPELL_TYPE.LINEAR}):AddDraw()
     W = _Spell({Slot = _W, DamageName = "W", Range = 1000, Width = 100, Delay = 0.25, Speed = math.huge, Aoe = false, Collision = false, Type = SPELL_TYPE.LINEAR}):AddDraw()
     E = _Spell({Slot = _E, DamageName = "E", Range = 600, Type = SPELL_TYPE.TARGETTED}):AddDraw()
-    R = _Spell({Slot = _R, DamageName = "R", Range = 750, Width = 300, Delay = 0.25, Speed = math.huge, Aoe = true, Collision = false, Type = SPELL_TYPE.CIRCULAR}):AddDraw()
+    R = _Spell({Slot = _R, DamageName = "R", Range = 625, Width = 300, Delay = 0.25, Speed = 1600, Aoe = true, Collision = false, Type = SPELL_TYPE.CIRCULAR}):AddDraw()
 
     TS:AddToMenu(Menu)
 
