@@ -1,7 +1,7 @@
 local ScriptName = "BioLogic Lux"
 local AUTOUPDATES = true
 local Author = "Da Vinci"
-local version = 1.4
+local version = 1.5
 
 if myHero.charName ~= "Lux" then return end
 
@@ -36,16 +36,16 @@ function OnLoad()
     if OrbwalkManager == nil then print("Check your SimpleLib file, isn't working... The script can't load without SimpleLib. Try to copy-paste the entire SimpleLib.lua on your common folder.") return end
     DelayAction(function() CheckUpdate() end, 5)
     DelayAction(function() _arrangePriorities() end, 10)
-    TS = TargetSelector(TARGET_LESS_CAST_PRIORITY, 3500, DAMAGE_PHYSICAL)
+    TS = TargetSelector(TARGET_LESS_CAST_PRIORITY, 1600, DAMAGE_PHYSICAL)
     Menu = scriptConfig(ScriptName.." by "..Author, ScriptName.."24052015")
     DefensiveItems = {
             Zhonyas     = _Spell({Range = 1000, Type = SPELL_TYPE.SELF}):AddSlotFunction(function() return FindItemSlot("ZhonyasHourglass") end),
         }
-    Q = _Spell({Slot = _Q, DamageName = "Q", Range = 1200, Width = 70, Delay = 0.25, Speed = 1200, Aoe = false, Collision = true, Type = SPELL_TYPE.LINEAR}):AddDraw()
+    Q = _Spell({Slot = _Q, DamageName = "Q", Range = 1200, Width = 65, Delay = 0.25, Speed = 1200, Aoe = false, Collision = true, Type = SPELL_TYPE.LINEAR}):AddDraw()
     W = _Spell({Slot = _W, DamageName = "W", Range = 0, Type = SPELL_TYPE.SELF}):AddDraw()
-    E = _Spell({Slot = _E, DamageName = "E", Range = 1100, Width = 330, Delay = 0.25, Speed = 1300, Aoe = false, Collision = false, Type = SPELL_TYPE.CIRCULAR}):AddDraw()
+    E = _Spell({Slot = _E, DamageName = "E", Range = 1050, Width = 275, Delay = 0.25, Speed = 1300, Aoe = false, Collision = false, Type = SPELL_TYPE.CIRCULAR}):AddDraw()
     Ignite = _Spell({Slot = FindSummonerSlot("summonerdot"), DamageName = "IGNITE", Range = 600, Type = SPELL_TYPE.TARGETTED})
-    R = _Spell({Slot = _R, DamageName = "R", Range = 3300, Width = 140, Delay = 1, Speed = math.huge, Collision = false, Aoe = true, Type = SPELL_TYPE.LINEAR}):AddDraw()
+    R = _Spell({Slot = _R, DamageName = "R", Range = 3300, Width = 140, Delay = 1, Speed = 1000, Collision = false, Aoe = true, Type = SPELL_TYPE.LINEAR}):AddDraw()
 
     Menu:addSubMenu(myHero.charName.." - Target Selector Settings", "TS")
         Menu.TS:addTS(TS)
@@ -167,7 +167,7 @@ function Combo()
         if Menu.Combo.useQ then
             Q:Cast(target)
         end
-        if Menu.Combo.useR and target.health < R:Damage(target) + Q:Damage(target) + E:Damage(target) then
+        if Menu.Combo.useR and TargetHaveBuff("LuxLightBinding", target) == true and target.health < R:Damage(target) + Q:Damage(target) then
             R:Cast(target)
         end
         if Menu.Combo.useR2 > 0 then
