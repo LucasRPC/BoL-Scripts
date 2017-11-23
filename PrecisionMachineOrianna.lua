@@ -1,6 +1,6 @@
 local ScriptName = "Precision Machine"
 local Author = "Da Vinci"
-local version = 1
+local version = 1.1
 local ran = math.random
 local UPDATE_HOST = "raw.githubusercontent.com"
 local UPDATE_PATH = "/LucasRPC/BoL-Scripts/PrecisionMachineOrianna.lua".."?rand="..ran(3500,5500)
