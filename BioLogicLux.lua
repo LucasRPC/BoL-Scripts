@@ -120,7 +120,7 @@ function OnTick()
     if Menu == nil then return end
     TS:update()
     KillSteal()
-    SetSkin(myHero, Menu.Misc.SetSkin)
+    --SetSkin(myHero, Menu.Misc.SetSkin)
     if OrbwalkManager:IsCombo() then
         Combo()
     elseif OrbwalkManager:IsHarass() then
