@@ -8,7 +8,7 @@
 
 local ScriptName = "Frosty Anivia"
 local Author = "Da Vinci"
-local Version = 1
+local Version = 1.1
 local FileName = _ENV.FILE_NAME
 
 if myHero.charName ~= "Anivia" then return end
@@ -20,6 +20,8 @@ local RefreshTime = 0.4
 local DefensiveItems = nil
 local QMissile = nil
 local RCircle = nil
+local Qobj = false
+local Robj = false
 local Markeds = {}
 
 function UpdateScript()
@@ -183,11 +185,11 @@ function Combo()
                 E:Cast(target)
             end
         end
-        if Menu.Combo.useR then
+        if Menu.Combo.useR and not Robj then
             if RCircle ~= nil then return end
             R:Cast(target)
         end
-        if Menu.Combo.useQ then
+        if Menu.Combo.useQ and not Qobj then
             if QMissile ~= nil then return end
             Q:Cast(target)
         end
@@ -199,9 +201,9 @@ end
 
 function DetectQ()
     for i, enemy in ipairs(GetEnemyHeroes()) do
-        if ValidTarget(enemy) and enemy.visible and QMissile and not enemy.dead then
+        if ValidTarget(enemy) and enemy.visible and Qobj and not enemy.dead then
             if GetDistance(enemy, QMissile) <= 200 then
-            CastSpell(_Q)
+                CastSpell(_Q)
             end
         end
     end
@@ -271,9 +273,11 @@ AddCreateObjCallback(
         if obj and obj.name and obj.type then
         if obj.name == "cryo_FlashFrost_Player_mis.troy" then
             QMissile = obj
+            Qobj = true
         end
         if obj.name == "cryo_storm_green_team.troy" then
             RCircle = obj
+            Robj = true
         end
     end
 end)
@@ -284,9 +288,11 @@ AddDeleteObjCallback(
     if obj and obj.name and obj.type then
         if obj.name == "cryo_FlashFrost_mis.troy" then
             QMissile = nil
+            Qobj = false
         end
         if obj.name == "cryo_storm_green_team.troy" then
             RCircle = nil
+            Robj = false
         end
     end
 end)
