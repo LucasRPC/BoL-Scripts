@@ -1,6 +1,6 @@
 local ScriptName = "Precision Machine"
 local Author = "Da Vinci"
-local version = 1.1
+local version = 1.2
 local ran = math.random
 local UPDATE_HOST = "raw.githubusercontent.com"
 local UPDATE_PATH = "/LucasRPC/BoL-Scripts/PrecisionMachineOrianna.lua".."?rand="..ran(3500,5500)
@@ -511,18 +511,6 @@ function ObjectsInArea(range, delay, array)
                 if GetDistanceSqr(PosBall, Position) <= range * range and WillHit then
                     table.insert(objects2, object)
                 end
-            end
-        end
-    end
-    return objects2
-end
-
-function ObjectsInArea(objects, range, PosBall)
-    local objects2 = {}
-    for i, object in ipairs(objects) do
-        if ValidTarget(object) then
-            if GetDistanceSqr(PosBall, object) <= range * range then
-                table.insert(objects2, object)
             end
         end
     end
